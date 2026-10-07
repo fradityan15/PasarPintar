@@ -21,11 +21,13 @@ const acceptedTerms = ref(false)
 const resetMode = ref(false)
 const resetSent = ref(false)
 const formError = ref('')
+const registrationComplete = ref(false)
 
 watch(() => props.mode, () => {
   resetMode.value = false
   resetSent.value = false
   formError.value = ''
+  registrationComplete.value = false
 })
 
 function submitAuth() {
@@ -35,6 +37,7 @@ function submitAuth() {
     return
   }
   const derivedName = fullName.value.trim() || emailAddress.value.split('@')[0] || 'Pelanggan'
+  if (props.mode === 'register') registrationComplete.value = true
   emit('authenticated', { name: derivedName, email: emailAddress.value.trim(), phone: phoneNumber.value.trim() })
 }
 
@@ -64,7 +67,12 @@ function openResetForm() {
       <section class="auth-form-panel">
         <button class="auth-back" type="button" @click="emit('back')"><span>←</span> Kembali ke beranda</button>
 
-        <template v-if="resetMode">
+        <template v-if="registrationComplete">
+          <div class="auth-heading"><span class="auth-kicker">AKUN BERHASIL DIBUAT</span><h2>Selamat datang, {{ fullName.trim() || emailAddress.split('@')[0] }}!</h2><p>Akun PasarPintar kamu sudah siap. Pilih tombol di bawah untuk mulai menjelajahi produk lokal.</p></div>
+          <button class="auth-submit registration-continue" type="button" @click="emit('back')">Mulai Belanja <span>→</span></button>
+        </template>
+
+        <template v-else-if="resetMode">
           <div class="auth-heading"><span class="auth-kicker">BANTUAN AKUN</span><h2>{{ resetSent ? 'Periksa email kamu' : 'Atur ulang kata sandi' }}</h2><p>{{ resetSent ? `Jika akun untuk ${emailAddress} terdaftar, petunjuk pemulihan akan dikirim.` : 'Masukkan email akunmu. Kami akan mengirim petunjuk untuk mengatur ulang kata sandi.' }}</p></div>
           <form v-if="!resetSent" class="auth-form" @submit.prevent="requestPasswordReset"><label class="auth-field"><span>Email</span><input v-model="emailAddress" type="email" autocomplete="email" placeholder="nama@email.com" required /></label><button class="auth-submit" type="submit">Kirim petunjuk reset <span>→</span></button></form>
           <button class="auth-switch-back" type="button" @click="resetMode = false; resetSent = false">Kembali ke masuk</button>

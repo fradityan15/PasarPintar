@@ -56,53 +56,42 @@ function recheckOssApi() {
     <header class="page-heading">
       <div class="heading-copy">
         <div class="admin-breadcrumb">
-          <a href="#back" @click.prevent="emit('backToVerificationList')">Portal Super Admin</a> &nbsp;›&nbsp;
-          <a href="#back" @click.prevent="emit('backToVerificationList')">Manajemen Entitas</a> &nbsp;›&nbsp;
-          <a href="#back" @click.prevent="emit('backToVerificationList')">Antrean Verifikasi Toko</a> &nbsp;›&nbsp;
-          <b>Detail Verifikasi (VERIF-UMKM-2024-089)</b>
+          ADMIN CONSOLE &nbsp;›&nbsp;
+          <a href="#back" @click.prevent="emit('backToVerificationList')">Verifikasi Toko</a> &nbsp;›&nbsp;
+          <b>#VERIF-UMKM-2024-089</b>
         </div>
 
         <div class="status-pills-row">
           <span class="pill-status" :class="isApproved ? 'mint' : 'red'">
-            ● {{ isApproved ? 'TERVERIFIKASI RESMI' : 'MENUNGGU VERIFIKASI ADMIN' }}
+            ● {{ isApproved ? 'TERVERIFIKASI RESMI' : 'MENUNGGU VERIFIKASI' }}
           </span>
           <span class="pill-status teal">PRIORITAS DISPERINDAG</span>
-          <span class="pill-status gray">ID: REG-TMG-08291</span>
-          <small class="submission-date">Diajukan: 24 Okt 2024, 09:14 WIB</small>
         </div>
 
-        <h1>Pemeriksaan & Verifikasi Legalitas Toko:<br />Koperasi Tani Sindoro Sejahtera</h1>
+        <h1>Verifikasi Legalitas Toko: Koperasi Tani Sindoro Sejahtera</h1>
       </div>
 
       <div class="heading-actions">
         <button type="button" class="btn-outline" @click="showRevisionModal = true">
-          ✎ Minta Revisi Dokumen
+          ✎ Minta Revisi
         </button>
         <button type="button" class="btn-outline-red" @click="showRejectModal = true">
-          🚫 Tolak Pendaftaran
+          🚫 Tolak
         </button>
         <button type="button" class="btn-primary" :disabled="isApproved" @click="approveStore">
-          {{ isApproved ? '✓ Toko Resmi Aktif' : '✓ Setujui & Terbitkan Toko Resmi' }}
+          {{ isApproved ? '✓ Toko Resmi Aktif' : '✓ Setujui Toko Resmi' }}
         </button>
       </div>
     </header>
 
     <!-- OSS API Sync Status Banner -->
     <section class="oss-banner">
-      <div class="banner-icon-wrap">
-        <svg viewBox="0 0 24 24" class="sync-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-      </div>
       <div class="banner-body">
         <div class="banner-title-row">
-          <h2>Sinkronisasi API OSS BKPM & Kemenkop UKM</h2>
-          <span class="pill-active">● TERHUBUNG AKTIF</span>
+          <h2>Sinkronisasi API OSS BKPM: Status NIB Active 100% Valid Ditjen AHU</h2>
         </div>
-        <p>
-          Status NIB Koperasi/UMKM terdaftar aktif dan terverifikasi di sistem Kementerian Investasi/BKPM. Hasil pencocokan otomatis cocok <strong>100%</strong> dengan database Ditjen AHU & Kemenkop UKM.
-        </p>
       </div>
       <div class="banner-sync-info">
-        <small>Terakhir Sinkron: Hari Ini, 08:30 WIB</small>
         <button type="button" class="btn-sync-api" @click="recheckOssApi">
           ↻ Cek Ulang API
         </button>

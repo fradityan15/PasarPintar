@@ -64,29 +64,88 @@ function printReport() {
   <main class="analytics-content">
     <div class="analytics-heading">
       <div class="analytics-heading-copy">
-        <div class="analytics-breadcrumb">PORTAL SUPER ADMIN <i>›</i> UTAMA <i>›</i> <b>LAPORAN & STATISTIK ANALISIS NASIONAL</b></div>
-        <div class="analytics-title-row"><h1>Laporan &amp; Statistik Analisis Nasional Ekosistem UMKM</h1><span class="telemetry"><i/> LIVE TELEMETRI 38 PROVINSI</span></div>
-        <p>Agregasi data makro ekonomi, tren perputaran nilai transaksi (GMV), performa klaster sentra daerah 38 provinsi, efektivitas subsidi logistik 3T, dan kesiapan penetrasi ekspor komoditas binaan.</p>
+        <div class="analytics-breadcrumb">ADMIN CONSOLE &nbsp;›&nbsp; <b>STATISTIK &amp; ANALISIS NASIONAL</b></div>
+        <div class="analytics-title-row">
+          <h1>Statistik &amp; Analisis Nasional Ekosistem UMKM</h1>
+        </div>
       </div>
       <div class="report-controls">
-        <div class="period-tabs" role="group" aria-label="Periode laporan"><button v-for="item in periods" :key="item" type="button" :class="{ active: period === item }" :aria-pressed="period === item" @click="period = item">{{ item }}<span v-if="item === 'Kustom'">▣</span></button></div>
-        <label class="filter-select"><span>☷</span><select v-model="region" aria-label="Filter wilayah"><option>Semua Wilayah</option><option>Jawa Tengah</option><option>Jawa Barat</option><option>Nusa Tenggara Timur</option><option>Sulawesi Selatan</option><option>Riau</option></select></label>
-        <label class="filter-select sector-select"><span>⌘</span><select v-model="sector" aria-label="Filter sektor"><option>Semua Sektor</option><option>Kuliner & Herbal</option><option>Wastra & Tenun</option><option>Kriya & Kerajinan</option></select></label>
-        <div class="export-actions-group">
-          <button class="export-pdf" type="button" @click="printReport">▤ &nbsp; Unduh Rekap (PDF)</button>
-          <button class="export-data" type="button" @click="exportAnalytics">⇧ &nbsp; Export Data Analitik</button>
+        <div class="period-tabs" role="group" aria-label="Periode laporan">
+          <button v-for="item in periods" :key="item" type="button" :class="{ active: period === item }" :aria-pressed="period === item" @click="period = item">{{ item }}</button>
         </div>
-        <div v-if="period === 'Kustom'" class="custom-range"><label>Dari <input v-model="customStart" type="date" aria-label="Tanggal mulai"/></label><label>Sampai <input v-model="customEnd" type="date" aria-label="Tanggal akhir"/></label></div>
+        <label class="filter-select">
+          <span>☷</span>
+          <select v-model="region" aria-label="Filter wilayah">
+            <option>Semua Wilayah</option>
+            <option>Jawa Tengah</option>
+            <option>Jawa Barat</option>
+            <option>Nusa Tenggara Timur</option>
+            <option>Sulawesi Selatan</option>
+            <option>Riau</option>
+          </select>
+        </label>
+        <label class="filter-select sector-select">
+          <span>⌘</span>
+          <select v-model="sector" aria-label="Filter sektor">
+            <option>Semua Sektor</option>
+            <option>Kuliner &amp; Herbal</option>
+            <option>Wastra &amp; Tenun</option>
+            <option>Kriya &amp; Kerajinan</option>
+          </select>
+        </label>
+        <div class="export-dropdown-wrap">
+          <select class="export-dropdown" aria-label="Opsi Ekspor" @change="(e: Event) => { const v = (e.target as HTMLSelectElement).value; if(v === 'pdf') printReport(); else if(v === 'csv') exportAnalytics(); (e.target as HTMLSelectElement).value = ''; }">
+            <option value="" disabled selected>Ekspor ▾</option>
+            <option value="pdf">▤ Unduh Rekap (PDF)</option>
+            <option value="csv">⇧ Export Data Analitik (CSV)</option>
+          </select>
+        </div>
+        <div v-if="period === 'Kustom'" class="custom-range">
+          <label>Dari <input v-model="customStart" type="date" aria-label="Tanggal mulai"/></label>
+          <label>Sampai <input v-model="customEnd" type="date" aria-label="Tanggal akhir"/></label>
+        </div>
       </div>
     </div>
 
-    <section class="macro-banner"><div class="macro-icon">◈</div><div class="macro-copy"><span class="macro-kicker"><i/> SINKRONISASI INDIKATOR MAKRO KEMENKOP UKM & BAPPENAS</span><h2>Target Pertumbuhan Digitalisasi UMKM Nasional 2024<br/>Telah Tercapai 84.6%</h2><div class="macro-chips"><span>↗ Penetrasi Pasar Antar pulau <b>+31.2%</b></span><span>◉ Rasio Onboarding Daerah 3T <b>3 Klaster</b></span><span>♧ Nir-Sengketa Escrow <b>99.8%</b></span></div></div><button type="button" @click="notify('Ringkasan kebijakan fiskal UMKM akan dibuka di tab baru.')">Lihat Ringkasan Kebijakan Fiskal UKM <b>→</b></button></section>
+    <section class="macro-banner">
+      <div class="macro-copy">
+        <h2>Target Digitalisasi UMKM 2024: Tercapai 84.6%</h2>
+      </div>
+      <button type="button" @click="notify('Ringkasan kebijakan fiskal UMKM akan dibuka di tab baru.')">Lihat Kebijakan Fiskal →</button>
+    </section>
 
     <section class="metric-grid" aria-label="Indikator kinerja utama">
-      <article class="metric-card"><div class="metric-top"><small>GROSS MERCHANDISE<br/>VALUE (GMV)</small><span class="metric-icon mint">▣</span></div><strong>Rp 48,65<br class="metric-break"/> M</strong><div class="metric-change">↗ <b>+24.8%</b> <span>vs Rp 38,98 M<br/>(2023)</span></div><div class="metric-foot">Rata-rata Order <b>Rp 285.000 / trx</b></div></article>
-      <article class="metric-card"><div class="metric-top"><small>TOTAL UMKM AKTIF<br/>TRANSAKSI</small><span class="metric-icon mint">▦</span></div><strong>14.210<br class="metric-break"/> Toko</strong><div class="metric-change"><b>+1.240 Toko</b> <span>+12.4% MoM<br/>(Target 15K)</span></div><div class="metric-foot">Legalitas (NIB & BPOM/Halal) <b>87.2% Terverifikasi</b></div></article>
-      <article class="metric-card"><div class="metric-top"><small>EFISIENSI SUBSIDI<br/>ONGKIR 3T</small><span class="metric-icon coral">▰</span></div><strong>Rp 2,42 M</strong><div class="metric-change"><b>31.420 Resi<br/>Disubsidi</b> <span>74.2% Anggaran Q2</span></div><div class="metric-foot">Reduksi <b>~48% Lebih</b><br/>Disparitas Ongkir Hemat</div></article>
-      <article class="metric-card"><div class="metric-top"><small>KESIAPAN PENETRASI<br/>EKSPOR</small><span class="metric-icon gray">◉</span></div><strong>420 SKU</strong><div class="metric-change"><b>Indikasi Geografis (IG)</b> <span>+18.5% QoQ<br/>(ASEAN)</span></div><div class="metric-foot">Potensi Pipeline Kontrak <b class="coral-text">USD 1.2M</b></div></article>
+      <article class="metric-card" title="Rata-rata Order: Rp 285.000 / trx">
+        <div class="metric-top">
+          <small>Gross Merchandise Value (GMV)</small>
+        </div>
+        <strong>Rp 48,65 M</strong>
+        <div class="metric-change">↗ <b>+24.8%</b> <span>vs Rp 38,98 M (2023)</span></div>
+      </article>
+
+      <article class="metric-card" title="Legalitas (NIB &amp; BPOM/Halal): 87.2% Terverifikasi">
+        <div class="metric-top">
+          <small>Total UMKM Aktif Transaksi</small>
+        </div>
+        <strong>14.210 Toko</strong>
+        <div class="metric-change"><b>+1.240 Toko</b> <span>+12.4% MoM</span></div>
+      </article>
+
+      <article class="metric-card" title="Reduksi ~48% Lebih Disparitas Ongkir">
+        <div class="metric-top">
+          <small>Efisiensi Subsidi Ongkir 3T</small>
+        </div>
+        <strong>Rp 2,42 M</strong>
+        <div class="metric-change"><b>31.420 Resi</b> <span>Disubsidi</span></div>
+      </article>
+
+      <article class="metric-card" title="Potensi Pipeline Kontrak: USD 1.2M">
+        <div class="metric-top">
+          <small>Kesiapan Penetrasi Ekspor</small>
+        </div>
+        <strong>420 SKU</strong>
+        <div class="metric-change"><b>+18.5% QoQ</b> <span>(ASEAN)</span></div>
+      </article>
     </section>
 
     <section class="chart-grid">
@@ -274,14 +333,14 @@ function printReport() {
   max-width: 130px;
 }
 
-.export-actions-group {
+.export-dropdown-wrap {
+  height: 38px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: nowrap;
+  margin-left: auto;
 }
 
-.export-pdf {
+.export-dropdown {
   height: 38px;
   padding: 0 14px;
   border: 1px solid #cbd5e1;
@@ -289,32 +348,22 @@ function printReport() {
   color: #047857;
   background: #ffffff;
   font-size: 13px;
-  font-weight: 700;
-  white-space: nowrap;
+  font-weight: 600;
+  cursor: pointer;
+  outline: 0;
   transition: all 0.15s ease;
 }
 
-.export-pdf:hover {
-  background: #f8fafc;
+.export-dropdown:hover {
+  border-color: #059669;
+  background: #f0fdf4;
 }
 
-.export-data {
-  height: 38px;
-  padding: 0 16px;
-  border: 0;
-  border-radius: 8px;
-  color: white;
-  background: #059669;
+.macro-desc {
+  margin: 4px 0 0;
+  color: #a7f3d0;
   font-size: 13px;
-  font-weight: 700;
-  white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
-  transition: all 0.15s ease;
-}
-
-.export-data:hover {
-  background: #047857;
-  transform: translateY(-1px);
+  font-weight: 500;
 }
 
 .custom-range {

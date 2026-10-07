@@ -398,101 +398,85 @@ function downloadGeoJson() {
     <header class="page-heading">
       <div class="heading-copy">
         <div class="admin-breadcrumb">
-          ▣ &nbsp; PORTAL SUPER ADMIN &nbsp;›&nbsp; MANAJEMEN ENTITAS &nbsp;›&nbsp; <b>Kategori & Sentra Daerah</b>
+          ADMIN CONSOLE &nbsp;›&nbsp; <b>KATEGORI &amp; SENTRA DAERAH</b>
         </div>
-        <h1>Manajemen Kategori Komoditas &<br />Sentra Daerah Nusantara</h1>
-        <p>
-          Pengaturan taksonomi produk UMKM, pemetaan klaster sentra produksi lokal di 38 provinsi, kuota program afirmasi daerah 3T, dan sinkronisasi standar komoditas nasional.
-        </p>
+        <h1>Manajemen Kategori Komoditas &amp; Sentra Daerah</h1>
       </div>
 
       <div class="heading-actions">
-        <button type="button" class="btn-outline" @click="exportCsv">
-          <svg viewBox="0 0 24 24" class="btn-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export Data Sentra (CSV)
-        </button>
-        <button type="button" class="btn-outline" @click="downloadGeoJson">
-          <svg viewBox="0 0 24 24" class="btn-icon"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          Unduh Peta Sebaran (GeoJSON)
-        </button>
+        <select class="filter-select export-dropdown" aria-label="Opsi Ekspor" @change="(e: Event) => { notify('Mengeksport data sentra...'); (e.target as HTMLSelectElement).value = ''; }">
+          <option value="" disabled selected>Ekspor ▾</option>
+          <option value="csv">Export Data Sentra (CSV)</option>
+          <option value="geojson">Unduh Peta Sebaran (GeoJSON)</option>
+        </select>
         <button type="button" class="btn-primary" @click="showCreateModal = true">
-          ＋ Tambah Kategori / Sentra Baru
+          ＋ Tambah Sentra Baru
         </button>
       </div>
     </header>
 
     <!-- Priority Banner -->
     <section class="priority-banner">
-      <div class="banner-icon-wrap">
-        <svg viewBox="0 0 24 24" class="shield-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      </div>
       <div class="banner-body">
         <div class="banner-title-row">
-          <h2>Program Pembinaan Sentra Prioritas Nasional</h2>
-          <span class="apbn-badge">DUKUNGAN APBN GBBI & BUMN LOGISTIK</span>
+          <h2>Pembinaan Sentra Prioritas 3T: 12 Sentra Daerah Aktif Subsidi</h2>
         </div>
-        <p>
-          12 Sentra Daerah 3T (Tertinggal, Terdepan, Terluar) aktif mendapatkan subsidi ongkir laut-udara eksplisit komoditas sentra hingga Rp 150rb per kargo untuk mempercepat penetrasi produk lokal ke pasar nasional.
-        </p>
       </div>
       <div class="banner-actions">
         <button type="button" class="btn-banner-light" @click="notify('Navigasi ke tinjauan alokasi sentra 3T...')">
-          Tinjau Alokasi Sentra 3T
-        </button>
-        <button type="button" class="btn-banner-dark" @click="notify('Konfigurasi subsidi logistik dibuka.')">
-          Konfigurasi Subsidi Logistik
+          Tinjau Alokasi 3T →
         </button>
       </div>
     </section>
 
     <!-- Summary Stats Grid -->
     <section class="summary-stats-grid">
-      <article class="stat-card">
+      <article class="stat-card" title="Terakreditasi Kominfo & Kemenkop">
         <div class="stat-header">
-          <span class="stat-title">TOTAL KATEGORI & SUB</span>
-          <span class="stat-icon-wrap mint"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z"/></svg></span>
+          <span class="stat-title">TOTAL KATEGORI &amp; SUB</span>
         </div>
         <div class="stat-value-row">
           <strong class="stat-value">18 / 142 Sub</strong>
+        </div>
+        <div class="stat-footer-row">
           <span class="delta-pill mint">+4 Kategori Baru</span>
         </div>
-        <small class="stat-subtext">Terakreditasi Kominfo & Kemenkop</small>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="38 Provinsi • 514 Kabupaten">
         <div class="stat-header">
           <span class="stat-title">SENTRA DAERAH TERDAFTAR</span>
-          <span class="stat-icon-wrap green"><svg viewBox="0 0 24 24"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg></span>
         </div>
         <div class="stat-value-row">
           <strong class="stat-value">128 Klaster</strong>
-          <span class="delta-pill mint">+12% YoY Terdaftar</span>
         </div>
-        <small class="stat-subtext">38 Provinsi • 514 Kabupaten</small>
+        <div class="stat-footer-row">
+          <span class="delta-pill mint">+12% YoY</span>
+        </div>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="Rata-rata 110 Toko / Sentra">
         <div class="stat-header">
-          <span class="stat-title">PERAJIN & UMKM TERHUBUNG</span>
-          <span class="stat-icon-wrap orange"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+          <span class="stat-title">PERAJIN &amp; UMKM TERHUBUNG</span>
         </div>
         <div class="stat-value-row">
           <strong class="stat-value">14.210 Toko</strong>
+        </div>
+        <div class="stat-footer-row">
           <span class="delta-pill coral">+8.4% MoM</span>
         </div>
-        <small class="stat-subtext">Rata-rata 110 Toko / Sentra</small>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="Total Perputaran Q4">
         <div class="stat-header">
           <span class="stat-title">NILAI TRANSAKSI SEKTORAN</span>
-          <span class="stat-icon-wrap gold"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
         </div>
         <div class="stat-value-row">
           <strong class="stat-value">Rp 1,48 Miliar</strong>
-          <span class="delta-pill neutral">Top: Kopi & Wastra</span>
         </div>
-        <small class="stat-subtext">Total Perputaran Q4</small>
+        <div class="stat-footer-row">
+          <span class="delta-pill mint">Top: Kopi &amp; Wastra</span>
+        </div>
       </article>
     </section>
 
@@ -584,7 +568,6 @@ function downloadGeoJson() {
       <div class="featured-heading">
         <div>
           <h2>Sentra Klaster Komoditas Unggulan</h2>
-          <p>Kategori & klaster daerah dengan performa omzet tertinggi, kontribusi UMKM terbanyak, serta cakupan subsidi pengiriman.</p>
         </div>
         <button type="button" class="text-link-map" @click="showInteractiveMapModal = true">
           Lihat Peta Sentra Interaktif →
@@ -633,7 +616,6 @@ function downloadGeoJson() {
         <header class="table-header">
           <div>
             <h2>Direktori Lengkap Sentra Komoditas Daerah</h2>
-            <p>Data agregat klaster komoditas, jumlah UMKM terhubung, dan status subsidi pemerintah.</p>
           </div>
           <div class="table-tools">
             <button type="button" class="icon-tool" title="Filter lanjut" @click="notify('Filter tingkat lanjut dibuka.')">⚙</button>
@@ -745,7 +727,6 @@ function downloadGeoJson() {
           <header class="card-header">
             <div>
               <h2>Pohon Taksonomi Terpopuler</h2>
-              <p>Hierarki kategori komoditas utama nasional beserta jumlah toko yang terdaftar di dalamnya.</p>
             </div>
             <button type="button" class="btn-add-sub" @click="createMode = 'kategori'; showCreateModal = true">
               + Sub Baru

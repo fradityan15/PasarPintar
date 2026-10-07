@@ -192,99 +192,75 @@ function saveQuotaSettings() {
     <header class="page-heading">
       <div class="heading-copy">
         <div class="admin-breadcrumb">
-          ▣ &nbsp; PORTAL SUPER ADMIN &nbsp;›&nbsp; TRANSAKSI & KEUANGAN &nbsp;›&nbsp; <b>Pencairan & Subsidi GBBI</b>
+          ADMIN CONSOLE &nbsp;›&nbsp; <b>PENCAIRAN &amp; SUBSIDI GBBI</b>
         </div>
-        <h1>Tata Kelola Pencairan Saldo UMKM &<br />Alokasi Subsidi GBBI</h1>
-        <p>
-          Monitoring real-time alokasi pagu APBN/BUMN kargo daerah 3T, otorisasi pencairan saldo rekening bersama ke mitra seller, serta audit klaim voucher Bangga Buatan Indonesia.
-        </p>
+        <h1>Pencairan Saldo UMKM &amp; Subsidi GBBI</h1>
       </div>
 
       <div class="heading-actions">
-        <button type="button" class="btn-outline" @click="notify('Mengunduh Laporan Penyerapan Subsidi GBBI (PDF/CSV)...')">
-          <svg viewBox="0 0 24 24" class="btn-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Unduh Laporan Penyerapan
-        </button>
-
-        <button type="button" class="btn-outline" @click="showQuotaModal = true">
-          <svg viewBox="0 0 24 24" class="btn-icon"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          Konfigurasi Kuota 3T
-        </button>
-
+        <select class="filter-select export-dropdown" aria-label="Opsi Ekspor" @change="(e: Event) => { notify('Mengunduh laporan penyerapan...'); (e.target as HTMLSelectElement).value = ''; }">
+          <option value="" disabled selected>Ekspor ▾</option>
+          <option value="pdf">Laporan Penyerapan PDF</option>
+          <option value="pagu">Konfigurasi Kuota 3T</option>
+        </select>
         <button type="button" class="btn-primary" @click="disburseMassal">
-          ＋ Eksekusi Pencairan Massal (Auto-Himbara)
+          ＋ Pencairan Massal
         </button>
       </div>
     </header>
 
     <!-- GBBI Allocation Banner -->
     <section class="gbbi-banner">
-      <div class="banner-icon-wrap">
-        <svg viewBox="0 0 24 24" class="flag-icon"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-      </div>
       <div class="banner-body">
         <div class="banner-title-row">
-          <h2>Pagu Subsidi GBBI Q4 2024 Berjalan Normal</h2>
-          <span class="pill-matched">APBN & BUMN LOGISTIK MATCHED</span>
+          <h2>Pagu Subsidi GBBI Q4: Terserap 84.4% (Rata-rata pencairan 1.8 jam)</h2>
         </div>
-        <p>
-          Total anggaran terserap <strong>84.4%</strong> (Rp 2.954.000.000 dari Pagu Rp 3.500.000.000). Rata-rata pencairan saldo mitra UMKM terverifikasi diselesaikan dalam waktu <strong>1.8 jam</strong>.
-        </p>
       </div>
-      <div class="banner-sla-info">
-        <small>SLA Pencairan Himbara: &lt; 4 Jam</small>
+      <div class="banner-actions">
         <button type="button" class="btn-check-pagu" @click="showQuotaModal = true">
-          Cek Pagu Terbuka
+          Cek Pagu →
         </button>
       </div>
     </section>
 
     <!-- Stat Metrics Grid -->
     <section class="summary-stats-grid">
-      <article class="stat-card">
+      <article class="stat-card" title="Pagu APBN Q4 2024">
         <div class="stat-header">
           <span class="stat-title">TOTAL ALOKASI SUBSIDI GBBI</span>
-          <span class="stat-icon-wrap mint"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
         </div>
         <strong class="stat-value">Rp 3.500.000.000</strong>
         <div class="stat-footer-row">
-          <small>Pagu APBN Q4 2024</small>
           <span class="delta-pill mint">84.4% Terserap</span>
         </div>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="12.840 Resi Afirmasi">
         <div class="stat-header">
           <span class="stat-title">REALISASI SUBSIDI KARGO 3T</span>
-          <span class="stat-icon-wrap green"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></span>
         </div>
         <strong class="stat-value">Rp 2.954.000.000</strong>
         <div class="stat-footer-row">
-          <small>12.840 Resi Afirmasi</small>
           <span class="delta-pill green">+16.2% MoM</span>
         </div>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="11.940 Rekening Seller">
         <div class="stat-header">
           <span class="stat-title">SALDO UMKM DICAIRKAN</span>
-          <span class="stat-icon-wrap mint"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
         </div>
         <strong class="stat-value">Rp 1.140.470.000</strong>
         <div class="stat-footer-row">
-          <small>11.940 Rekening Seller</small>
           <span class="delta-pill mint">100% Lunas Escrow</span>
         </div>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="18 Pengajuan Seller">
         <div class="stat-header">
           <span class="stat-title">PENCAIRAN MENUNGGU OTORISASI</span>
-          <span class="stat-icon-wrap orange"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
         </div>
         <strong class="stat-value">Rp 68.500.000</strong>
         <div class="stat-footer-row">
-          <small>18 Pengajuan Seller</small>
           <span class="delta-pill orange">SLA &lt; 2 Jam</span>
         </div>
       </article>
@@ -297,7 +273,6 @@ function saveQuotaSettings() {
         <header class="card-header">
           <div>
             <h2>Realisasi Subsidi Kargo per Kluster Wilayah 3T</h2>
-            <p>Distribusi penyerapan kuota ongkos kirim laut-udara untuk komoditas daerah.</p>
           </div>
         </header>
 
@@ -325,7 +300,6 @@ function saveQuotaSettings() {
         <header class="card-header compact">
           <div>
             <h2>Distribusi Bank Pencairan Saldo Seller</h2>
-            <p>Host-to-Host settlement Bank Himbara</p>
           </div>
         </header>
 

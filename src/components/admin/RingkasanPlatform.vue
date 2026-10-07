@@ -178,23 +178,20 @@ function sendBroadcast() {
     <header class="page-heading">
       <div class="heading-copy">
         <div class="admin-breadcrumb">
-          PLATFORM ADMIN &nbsp;›&nbsp; RINGKASAN MONITORING NASIONAL &nbsp;›&nbsp; <b>LIVE TELEMETRY</b>
+          ADMIN CONSOLE &nbsp;›&nbsp; <b>RINGKASAN MONITORING NASIONAL</b>
         </div>
-        <h1>Pusat Kendali & Monitoring<br />Ekosistem PasarPintar</h1>
-        <p>
-          Pantau performa agregat UMKM nasional, moderasi kurasi produk & legalitas toko binaan, serta rekapitulasi transaksi rekber secara <strong>real-time</strong> kolaborasi Kemenkop UKM.
-        </p>
+        <h1>Pusat Kendali Ekosistem PasarPintar</h1>
       </div>
 
       <div class="heading-actions">
         <select v-model="selectedTimeframe" class="filter-select" aria-label="Rentang Waktu">
-          <option value="30 Hari Terakhir (Juni 2024)">📅 30 Hari Terakhir (Juni 2024)</option>
-          <option value="7 Hari Terakhir">📅 7 Hari Terakhir</option>
-          <option value="Triwulan Q4 2024">📅 Triwulan Q4 2024</option>
+          <option value="30 Hari Terakhir (Juni 2024)">30 Hari Terakhir</option>
+          <option value="7 Hari Terakhir">7 Hari Terakhir</option>
+          <option value="Triwulan Q4 2024">Triwulan Q4 2024</option>
         </select>
 
         <select v-model="selectedProvince" class="filter-select" aria-label="Filter Provinsi">
-          <option value="Semua 38 Provinsi">🌐 Semua 38 Provinsi</option>
+          <option value="Semua 38 Provinsi">Semua 38 Provinsi</option>
           <option value="Jawa Tengah">Jawa Tengah</option>
           <option value="DI Yogyakarta">DI Yogyakarta</option>
           <option value="Nusa Tenggara Timur">Nusa Tenggara Timur</option>
@@ -202,37 +199,29 @@ function sendBroadcast() {
           <option value="Sulawesi Utara">Sulawesi Utara</option>
         </select>
 
-        <button type="button" class="btn-outline" @click="notify('Mengunduh Laporan Rekap Ringkasan Platform (PDF)...')">
-          Unduh Rekap (PDF/Excel)
-        </button>
+        <select class="filter-select export-dropdown" aria-label="Opsi Ekspor" @change="(e: Event) => { notify('Mengunduh rekap ringkasan...'); (e.target as HTMLSelectElement).value = ''; }">
+          <option value="" disabled selected>Ekspor ▾</option>
+          <option value="pdf">Unduh Rekap PDF</option>
+          <option value="excel">Unduh Excel</option>
+        </select>
 
         <button type="button" class="btn-primary" @click="showBroadcastModal = true">
-          📢 + Broadcast Pengumuman Nasional
+          📢 + Broadcast
         </button>
       </div>
     </header>
 
-    <!-- Priority Kemenkop Banner -->
+    <!-- Priority Compact Alert -->
     <section class="priority-banner">
-      <div class="banner-icon-wrap">
-        <span>!</span>
-      </div>
       <div class="banner-body">
         <div class="banner-title-row">
-          <h2>Verifikasi Batch Baru: 14 Toko UMKM & Koperasi Sentra Daerah</h2>
-          <span class="badge-priority">PRIORITAS REGULASI KEMENKOP</span>
-          <small class="sla-text">SLA tersisa: 1 jam 12 menit</small>
+          <h2>Antrean Verifikasi: 14 Toko UMKM Baru</h2>
+          <small class="sla-text">SLA: 1j 12m</small>
         </div>
-        <p>
-          menunggu persetujuan legalitas NIB / P-IRT sebelum batas sinkronisasi OSS malam ini (23:59 WIB). Penyelarasan NIB instan & legalitas pangan dapat meningkatkan alokasi program Gerakan Nasional Bangga Buatan Indonesia (GBBI).
-        </p>
       </div>
       <div class="banner-actions">
         <button type="button" class="btn-banner-red" @click="goToSection('Verifikasi Toko & UMKM')">
           Tinjau Antrean (14 Toko)
-        </button>
-        <button type="button" class="btn-banner-link" @click="notify('Log Sinkronisasi API OSS BKPM dimuat.')">
-          Log Sinkronisasi OSS
         </button>
       </div>
     </section>
@@ -240,74 +229,54 @@ function sendBroadcast() {
     <!-- Metrics Grid (4 Cards) -->
     <section class="summary-stats-grid">
       <!-- Metric 1: GMV -->
-      <article class="stat-card">
+      <article class="stat-card" title="Total 112.940 Transaksi Sukses • 38 Provinsi">
         <div class="stat-header">
           <span class="stat-title">VOLUME TRANSAKSI BRUTO</span>
-          <span class="stat-icon-wrap mint"><svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg></span>
         </div>
-        <small class="stat-lbl">GMV Nasional</small>
         <div class="stat-value-row">
           <strong class="stat-value">Rp 1.482.650.000</strong>
         </div>
         <div class="stat-footer-row">
           <span class="delta-pill mint">+18.4% vs bulan lalu</span>
-          <div class="stat-sub-info">
-            <small>Total 112.940 Transaksi Sukses</small> • <b>38 Provinsi</b>
-          </div>
         </div>
       </article>
 
       <!-- Metric 2: Sellers -->
-      <article class="stat-card">
+      <article class="stat-card" title="94% Lolos NIB/Halal • Kemenkop Hub">
         <div class="stat-header">
           <span class="stat-title">REGISTRI PENJUAL</span>
-          <span class="stat-icon-wrap mint"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
         </div>
-        <small class="stat-lbl">Toko UMKM Terverifikasi</small>
         <div class="stat-value-row">
           <strong class="stat-value">3.420 <small>Unit</small></strong>
         </div>
         <div class="stat-footer-row">
           <span class="delta-pill mint">+148 Toko Baru</span>
-          <div class="stat-sub-info">
-            <small>94% Lolos NIB/Halal</small> • <b>Kemenkop Hub</b>
-          </div>
         </div>
       </article>
 
       <!-- Metric 3: Products -->
-      <article class="stat-card">
+      <article class="stat-card" title="98.2% Lolos Uji Mutu • 6 Kurasi Laporan">
         <div class="stat-header">
           <span class="stat-title">KATALOG KOMODITAS</span>
-          <span class="stat-icon-wrap mint"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
         </div>
-        <small class="stat-lbl">Produk Terkurasi & Tayang</small>
         <div class="stat-value-row">
           <strong class="stat-value">48.910 <small>SKU</small></strong>
         </div>
         <div class="stat-footer-row">
-          <span class="delta-pill mint">98.2% Lolos Uji Mutu</span>
-          <div class="stat-sub-info">
-            <small class="warning-text">⚠️ 6 Kurasi Laporan</small> • <a href="#kurasi" class="link-btn" @click.prevent="goToSection('Katalog & Kurasi Produk')">Kurasi →</a>
-          </div>
+          <span class="delta-pill mint">+320 Aktif Minggu Ini</span>
         </div>
       </article>
 
       <!-- Metric 4: Escrow -->
-      <article class="stat-card">
+      <article class="stat-card" title="Auto-Settlement Aktif • Rekber Himbara">
         <div class="stat-header">
           <span class="stat-title">SISTEM REKBER AMAN</span>
-          <span class="stat-icon-wrap gold"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
         </div>
-        <small class="stat-lbl">Dana Rekber & Likuiditas</small>
         <div class="stat-value-row">
           <strong class="stat-value">Rp 342.180.000</strong>
         </div>
         <div class="stat-footer-row">
-          <span class="delta-pill mint">✓ 0 Sengketa &gt; 48 Jam</span>
-          <div class="stat-sub-info">
-            <small>Auto-Settlement Aktif</small> • <b>Rekber Himbara</b>
-          </div>
+          <span class="delta-pill mint">0 Sengketa &gt; 48 Jam</span>
         </div>
       </article>
     </section>

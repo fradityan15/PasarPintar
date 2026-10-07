@@ -292,108 +292,83 @@ function triggerReconcileBank() {
     <header class="page-heading">
       <div class="heading-copy">
         <div class="admin-breadcrumb">
-          ▣ &nbsp; PORTAL SUPER ADMIN &nbsp;›&nbsp; TRANSAKSI & KEUANGAN &nbsp;›&nbsp; <b>Monitoring Rekber & Escrow</b>
+          ADMIN CONSOLE &nbsp;›&nbsp; <b>MONITORING REKBER &amp; ESCROW</b>
         </div>
-        <h1>Monitoring Transaksi, Rekber &<br />Rekonsiliasi Escrow</h1>
-        <p>
-          Pengawasan perputaran dana transaksi, pelepasan escrow rekening bersama, investigasi sengketa pembayaran, dan rekonsiliasi auto-settlement Bank Himbara.
-        </p>
+        <h1>Monitoring Transaksi &amp; Rekber Escrow</h1>
       </div>
 
       <div class="heading-actions">
-        <button type="button" class="btn-outline" @click="notify('Mengunduh Jurnal Finansial Escrow (CSV)...')">
-          <svg viewBox="0 0 24 24" class="btn-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Unduh Jurnal Finansial
-        </button>
-        <button type="button" class="btn-outline" @click="notify('Buka Konfigurasi SLA Pencairan & Escrow...')">
-          <svg viewBox="0 0 24 24" class="btn-icon"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          Konfigurasi SLA
-        </button>
+        <select class="filter-select export-dropdown" aria-label="Opsi Ekspor" @change="(e: Event) => { notify('Mengunduh jurnal finansial...'); (e.target as HTMLSelectElement).value = ''; }">
+          <option value="" disabled selected>Ekspor ▾</option>
+          <option value="csv">Unduh Jurnal Finansial (CSV)</option>
+          <option value="sla">Konfigurasi SLA Pencairan</option>
+        </select>
         <button type="button" class="btn-primary" @click="showReconcileModal = true">
-          ＋ Audit Manual & Rekonsiliasi Bank
+          ＋ Audit &amp; Rekonsiliasi Bank
         </button>
       </div>
     </header>
 
     <!-- Escrow Protection Banner -->
     <section class="escrow-banner">
-      <div class="banner-icon-wrap">
-        <svg viewBox="0 0 24 24" class="shield-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-      </div>
       <div class="banner-body">
         <div class="banner-title-row">
-          <h2>Sistem Escrow Terlindungi & Auto-Settlement Aktif</h2>
-          <span class="status-pill mint">● Normal (Bank Himbara)</span>
+          <h2>Sistem Escrow Auto-Settlement Aktif: Rata-rata pencairan 4,2 jam.</h2>
         </div>
-        <p>
-          BRI, Mandiri, BNI, dan BCA terhubung online. Rata-rata waktu pencairan pasca-konfirmasi pembeli: <strong>4,2 jam</strong> (SLA pemerintah &lt; 24 jam).
-        </p>
       </div>
-      <div class="banner-reconcile-card">
-        <div class="reconcile-info">
-          <span>Dana Belum Rekonsiliasi H-1</span>
-          <strong>Rp 0 <small>(100% Match)</small></strong>
-        </div>
+      <div class="banner-actions">
         <button type="button" class="btn-health-log" @click="notify('Health log integrasi API Himbara dibuka.')">
-          Lihat Health Log
+          Health Log →
         </button>
       </div>
     </section>
 
     <!-- Stat Metrics Grid -->
     <section class="summary-stats-grid">
-      <article class="stat-card">
+      <article class="stat-card" title="892 Transaksi Berjalan • 100% Likuid Himbara">
         <div class="stat-header">
           <span class="stat-title">REKBER REKENING AKTIF</span>
-          <span class="stat-icon-wrap mint"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
         </div>
         <div class="stat-value-row">
           <strong class="stat-value">Rp 342.180.000</strong>
         </div>
         <div class="stat-footer-row">
-          <small class="stat-subtext">892 Transaksi Berjalan</small>
           <span class="delta-pill mint">100% Likuid Himbara</span>
         </div>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="11.940 Transaksi Tanpa Komplain • +14.2% MoM">
         <div class="stat-header">
-          <span class="stat-title">DANA SIAP DILEPAS (RELEASEABLE)</span>
-          <span class="stat-icon-wrap green"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+          <span class="stat-title">DANA SIAP DILEPAS</span>
         </div>
         <div class="stat-value-row">
           <strong class="stat-value">Rp 1.140.470.000</strong>
         </div>
         <div class="stat-footer-row">
-          <small class="stat-subtext">11.940 Transaksi Tanpa Komplain</small>
           <span class="delta-pill green">+14.2% MoM</span>
         </div>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="Subsidi Kementerian UKM • 70.4% Terpakai Q4">
         <div class="stat-header">
-          <span class="stat-title">SUBSIDI & KUPON ONGKIR</span>
-          <span class="stat-icon-wrap orange"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span>
+          <span class="stat-title">SUBSIDI &amp; KUPON ONGKIR</span>
         </div>
         <div class="stat-value-row">
           <strong class="stat-value">Rp 84.500.000</strong>
         </div>
         <div class="stat-footer-row">
-          <small class="stat-subtext">Subsidi Kementerian UMK</small>
-          <span class="delta-pill orange">70.4% Terpakai Q4</span>
+          <span class="delta-pill orange">70.4% Terpakai</span>
         </div>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="2 Kasus Dalam Mediasi Logistik • SLA < 12 Jam">
         <div class="stat-header">
           <span class="stat-title">SENGKETA / DISPUTE</span>
-          <span class="stat-icon-wrap gold"><svg viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1zM7 21h10M12 3v18"/></svg></span>
         </div>
         <div class="stat-value-row">
           <strong class="stat-value">Rp 3.850.000</strong>
         </div>
         <div class="stat-footer-row">
-          <small class="stat-subtext">2 Kasus Dalam Mediasi Logistik</small>
           <span class="delta-pill gold">SLA &lt; 12 Jam</span>
         </div>
       </article>

@@ -14,6 +14,16 @@ describe('App', () => {
     expect(wrapper.find('.location-control').exists()).toBe(false)
   })
 
+  it('keeps category filtering in the header without the duplicate category bar', async () => {
+    const wrapper = mount(App)
+
+    expect(wrapper.find('.category-nav').exists()).toBe(false)
+    expect(wrapper.find('#kategori').exists()).toBe(true)
+    expect(wrapper.get('.search-box select').element).toBeTruthy()
+    await wrapper.get('.search-box select').setValue('Wastra & Kriya')
+    expect(wrapper.get('.search-box select').element).toHaveProperty('value', 'Wastra & Kriya')
+  })
+
   it('opens the cart and starts checkout from the home page', async () => {
     vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
     const wrapper = mount(App)
@@ -80,7 +90,23 @@ describe('App', () => {
     await passwordFields[1]!.setValue('aman12345')
     await wrapper.get('.terms-choice input').setValue(true)
     await wrapper.get('.auth-form').trigger('submit')
+
+    expect(wrapper.get('.auth-heading h2').text()).toContain('Selamat datang, Dewi Pratama')
+    expect(wrapper.find('.auth-form').exists()).toBe(false)
+    await wrapper.get('.registration-continue').trigger('click')
     expect(wrapper.get('.account-actions').text()).toContain('Dewi Pratama')
+  })
+
+  it('keeps registration open while entering a long full name', async () => {
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    const wrapper = mount(App)
+
+    await wrapper.get('.account-register').trigger('click')
+    await wrapper.get('input[autocomplete="name"]').setValue('Dewi Pratama Kusumawardhani Putri Santoso')
+
+    expect(wrapper.get('.auth-heading h2').text()).toBe('Buat akun PasarPintar')
+    expect(wrapper.find('.auth-page').exists()).toBe(true)
+    expect((wrapper.get('input[autocomplete="name"]').element as HTMLInputElement).value).toBe('Dewi Pratama Kusumawardhani Putri Santoso')
   })
 
   it('opens the dedicated order tracking page and handles unknown orders', async () => {
@@ -119,6 +145,7 @@ describe('App', () => {
     expect(wrapper.findAll('.announcement-links.open a').map((link) => link.text())).toEqual([
       'Pusat Bantuan',
       'Lacak Pesanan',
+      'Portal Penjual',
       'Portal Pengelola',
       '◈ Gerakan Bangga Buatan ID',
     ])
@@ -171,5 +198,144 @@ describe('App', () => {
     expect(wrapper.findAll('.custom-range input[type="date"]')).toHaveLength(2)
     await wrapper.get('.filter-select select[aria-label="Filter wilayah"]').setValue('Nusa Tenggara Timur')
     expect(wrapper.findAll('.region-row')).toHaveLength(1)
+  })
+
+  it('opens the seller order dashboard and manages pickup and order status', async () => {
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    const wrapper = mount(App)
+
+    await wrapper.get('.announcement-links a[href="#seller"]').trigger('click')
+    expect(wrapper.get('.seller-page-heading h1').text()).toContain('Kelola Pesanan & Pengiriman Logistik')
+
+    await wrapper.findAll('.seller-tabs button').find((button) => button.text().includes('Perlu Diproses'))!.trigger('click')
+    const newOrder = wrapper.findAll('.seller-order-card').find((card) => card.text().includes('#ORD-PP-9825'))!
+    await newOrder.get('.order-primary').trigger('click')
+    await wrapper.findAll('.seller-tabs button').find((button) => button.text().includes('Siap Dikirim'))!.trigger('click')
+    expect(wrapper.findAll('.seller-order-card').find((card) => card.text().includes('#ORD-PP-9825'))!.text()).toContain('Siap Dikirim')
+
+    await wrapper.get('.seller-heading-actions .seller-primary-button').trigger('click')
+    expect(wrapper.get('.seller-pickup-dialog h2').text()).toBe('Atur pick-up pesanan')
+    await wrapper.get('.seller-pickup-dialog > div button:last-child').trigger('click')
+    expect(wrapper.get('[role="status"]').text()).toContain('Pick-up')
+  })
+
+  it('opens the seller product editor and supports add and edit modes', async () => {
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    const wrapper = mount(App)
+
+    await wrapper.get('.announcement-links a[href="#seller"]').trigger('click')
+    await wrapper.get('.seller-add-product').trigger('click')
+    expect(wrapper.get('.editor-page-heading h1').text()).toBe('Tambah Produk Baru UMKM')
+
+    await wrapper.findAll('.editor-mode-control button').find((button) => button.text().includes('Edit produk'))!.trigger('click')
+    expect(wrapper.get('.editor-page-heading h1').text()).toBe('Edit Detail Produk UMKM')
+    await wrapper.get('.editor-publish-button').trigger('click')
+    expect(wrapper.get('[role="status"]').text()).toContain('Perubahan produk berhasil disimpan')
+
+    await wrapper.findAll('.editor-mode-control button').find((button) => button.text().includes('Tambah produk'))!.trigger('click')
+    await wrapper.get('.editor-publish-button').trigger('click')
+    expect(wrapper.get('[role="alert"]').text()).toContain('Nama produk wajib diisi')
+
+    await wrapper.get('.name-field input').setValue('Tenun Ikat Flores Pewarna Alami')
+    expect(wrapper.get('.buyer-product-info > b').text()).toBe('Tenun Ikat Flores Pewarna Alami')
+    await wrapper.get('.editor-draft-button').trigger('click')
+    expect(wrapper.get('[role="status"]').text()).toContain('Draft produk berhasil disimpan')
+  })
+
+  it('opens the seller performance summary and filters its pending orders', async () => {
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    const wrapper = mount(App)
+
+    await wrapper.get('.announcement-links a[href="#seller"]').trigger('click')
+    await wrapper.findAll('.seller-nav button').find((button) => button.text().includes('Ringkasan Toko'))!.trigger('click')
+    expect(wrapper.get('.summary-heading h1').text()).toBe('Ringkasan Kinerja Toko')
+    expect(wrapper.findAll('.summary-kpi')).toHaveLength(4)
+    expect(wrapper.findAll('.summary-order-table tbody tr')).toHaveLength(3)
+
+    await wrapper.get('.summary-period select').setValue('7 Hari Terakhir')
+    expect(wrapper.get('.sales-kpi > strong').text()).toBe('Rp 4.210.000')
+    await wrapper.findAll('.summary-order-tabs button').find((button) => button.text() === 'Siap Kirim (3)')!.trigger('click')
+    expect(wrapper.findAll('.summary-order-table tbody tr')).toHaveLength(1)
+
+    await wrapper.get('.summary-table-footer button').trigger('click')
+    expect(wrapper.get('.seller-page-heading h1').text()).toContain('Kelola Pesanan & Pengiriman Logistik')
+  })
+
+  it('opens seller product inventory and updates stock or edits a selected product', async () => {
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    const wrapper = mount(App)
+
+    await wrapper.get('.announcement-links a[href="#seller"]').trigger('click')
+    await wrapper.findAll('.seller-nav button').find((button) => button.text().includes('Produk & Stok'))!.trigger('click')
+    expect(wrapper.get('.inventory-heading h1').text()).toBe('Katalog & Stok Produk Toko')
+    expect(wrapper.findAll('.inventory-table tbody tr')).toHaveLength(5)
+
+    await wrapper.get('.inventory-table tbody tr .stock-pill').trigger('click')
+    expect(wrapper.get('.inventory-stock-dialog h2').text()).toBe('Perbarui stok')
+    await wrapper.get('.inventory-stock-dialog input').setValue(30)
+    await wrapper.get('.inventory-stock-dialog > div button:last-child').trigger('click')
+    expect(wrapper.get('.inventory-table tbody tr .stock-pill').text()).toContain('30 pcs')
+
+    await wrapper.findAll('.inventory-tabs button').find((button) => button.text().includes('Non-aktif / Habis'))!.trigger('click')
+    expect(wrapper.findAll('.inventory-table tbody tr')).toHaveLength(1)
+
+    await wrapper.findAll('.inventory-tabs button').find((button) => button.text().includes('Semua Produk'))!.trigger('click')
+    const coffeeProduct = wrapper.findAll('.inventory-table tbody tr').find((row) => row.text().includes('500g'))!
+    await coffeeProduct.get('[title="Edit produk"]').trigger('click')
+    expect(wrapper.get('.editor-page-heading h1').text()).toBe('Edit Detail Produk UMKM')
+    expect((wrapper.get('.name-field input').element as HTMLInputElement).value).toContain('500g')
+    await wrapper.get('.editor-brand').trigger('click')
+    expect(wrapper.get('.inventory-heading h1').text()).toBe('Katalog & Stok Produk Toko')
+  })
+
+  it('opens seller finance reports and processes a valid balance withdrawal', async () => {
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    const wrapper = mount(App)
+
+    await wrapper.get('.announcement-links a[href="#seller"]').trigger('click')
+    await wrapper.findAll('.seller-nav button').find((button) => button.text().includes('Laporan Keuangan'))!.trigger('click')
+    expect(wrapper.get('.finance-heading h1').text()).toBe('Laporan Keuangan & Saldo Penjualan')
+    expect(wrapper.findAll('.balance-card')).toHaveLength(4)
+    expect(wrapper.findAll('.finance-table tbody tr')).toHaveLength(5)
+
+    await wrapper.findAll('.ledger-tabs button').find((button) => button.text() === 'Pencairan Saldo (WD)')!.trigger('click')
+    expect(wrapper.findAll('.finance-table tbody tr')).toHaveLength(2)
+    await wrapper.get('.ledger-tabs button').trigger('click')
+    await wrapper.get('.ledger-filters input').setValue('Hendra')
+    expect(wrapper.findAll('.finance-table tbody tr')).toHaveLength(1)
+    await wrapper.get('.ledger-filters input').setValue('')
+
+    await wrapper.get('.finance-withdraw-button').trigger('click')
+    expect(wrapper.get('.withdrawal-dialog h2').text()).toBe('Tarik saldo ke rekening')
+    await wrapper.get('.withdrawal-dialog input[aria-label="Jumlah penarikan"]').setValue(2000000)
+    await wrapper.get('.withdrawal-confirm').trigger('click')
+    expect(wrapper.get('.finance-toast').text()).toContain('Rp 2.000.000')
+    expect(wrapper.get('.available-card > strong').text()).toBe('Rp 10.450.000')
+    await wrapper.findAll('.ledger-tabs button').find((button) => button.text() === 'Pencairan Saldo (WD)')!.trigger('click')
+    expect(wrapper.findAll('.finance-table tbody tr')).toHaveLength(3)
+  })
+
+  it('opens seller store profile and validates courier settings before saving', async () => {
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    const wrapper = mount(App)
+
+    await wrapper.get('.announcement-links a[href="#seller"]').trigger('click')
+    await wrapper.findAll('.seller-nav button').find((button) => button.text().includes('Profil Toko & Kurir'))!.trigger('click')
+    expect(wrapper.get('.store-profile-heading h1').text()).toBe('Profil Toko & Pengiriman')
+    expect(wrapper.get('.public-store-identity b').text()).toBe('Koperasi Kopi Bajawa Lestari')
+    expect(wrapper.findAll('.profile-courier-card')).toHaveLength(4)
+
+    await wrapper.get('input[aria-label="Jam buka Senin"]').setValue('09:00')
+    expect((wrapper.get('input[aria-label="Jam buka Senin"]').element as HTMLInputElement).value).toBe('09:00')
+    for (const courierToggle of wrapper.findAll('.courier-toggle input')) await courierToggle.setValue(false)
+    await wrapper.get('.profile-save-action').trigger('click')
+    expect(wrapper.get('[role="alert"]').text()).toContain('Aktifkan minimal satu kurir')
+
+    await wrapper.get('.courier-toggle input').setValue(true)
+    await wrapper.get('.profile-save-action').trigger('click')
+    expect(wrapper.get('[role="status"]').text()).toContain('berhasil disimpan')
+
+    await wrapper.get('.profile-sticky-actions > button:first-of-type').trigger('click')
+    expect(wrapper.get('.seller-page-heading h1').text()).toContain('Kelola Pesanan & Pengiriman Logistik')
   })
 })

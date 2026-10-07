@@ -291,110 +291,82 @@ function runAiBatchCuration() {
     <header class="page-heading">
       <div class="heading-copy">
         <div class="admin-breadcrumb">
-          ▣ &nbsp; PORTAL SUPER ADMIN &nbsp;›&nbsp; MANAJEMEN ENTITAS &nbsp;›&nbsp; <b>Katalog & Kurasi Produk</b>
+          ADMIN CONSOLE &nbsp;›&nbsp; <b>KATALOG &amp; KURASI PRODUK</b>
         </div>
-        <div class="title-row">
-          <h1>Kurasi Mutu & Manajemen Katalog Produk UMKM</h1>
-          <span class="audit-tag">AUDIT TERPADU</span>
-        </div>
-        <p>
-          Validasi keaslian komoditas nusantara, sertifikasi pangan/izin edar produk, moderasi foto produk & klaim khasiat, serta pengawasan mutu tayang etalase nasional.
-        </p>
+        <h1>Kurasi Mutu &amp; Manajemen Katalog Produk UMKM</h1>
       </div>
 
       <div class="heading-actions">
-        <button type="button" class="btn-outline" @click="notify('Mengunduh Laporan Kurasi Mutu Produk (PDF)...')">
-          <svg viewBox="0 0 24 24" class="btn-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Unduh Laporan Kurasi
-        </button>
-        <button type="button" class="btn-outline" @click="notify('Buka Dokumen Standar Kemenkop & SKP-2024...')">
-          <svg viewBox="0 0 24 24" class="btn-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Standar Kemenkop
-        </button>
+        <select class="filter-select export-dropdown" aria-label="Opsi Ekspor" @change="(e: Event) => { notify('Mengunduh laporan kurasi...'); (e.target as HTMLSelectElement).value = ''; }">
+          <option value="" disabled selected>Ekspor ▾</option>
+          <option value="pdf">Laporan Kurasi PDF</option>
+          <option value="sop">Standar Kemenkop</option>
+        </select>
         <button type="button" class="btn-primary" @click="runAiBatchCuration">
           ✦ Kurasi Cepat AI Batch
         </button>
       </div>
     </header>
 
-    <!-- Critical Product Audit Banner -->
+    <!-- Critical Product Audit Alert -->
     <section class="critical-banner">
-      <div class="banner-icon-wrap">
-        <span>!</span>
-      </div>
       <div class="banner-body">
-        <div class="banner-title">Pemberitahuan Audit Produk Kritis</div>
-        <p>
-          <strong>6 produk baru terdeteksi klaim medis berlebihan atau belum melampirkan izin nomor P-IRT/BPOM terverifikasi.</strong> Diperlukan review kurator sebelum pukul 17:00 WIB agar antrean tayang tidak terblokir otomatis.
-        </p>
+        <div class="banner-title">Audit Produk Kritis: 6 produk terdeteksi belum melampirkan P-IRT/BPOM.</div>
       </div>
       <div class="banner-actions">
-        <small class="sla-text">SLA Kurasi tersisa: 18 menit lalu</small>
         <button type="button" class="btn-critical" @click="notify('Menampilkan 6 produk berisiko kritis...')">
-          Tinjau 6 Produk Kritis →
+          Tinjau (6 Produk) →
         </button>
       </div>
     </section>
 
     <!-- Metric Summary Cards Grid -->
     <section class="summary-stats-grid">
-      <article class="stat-card">
+      <article class="stat-card" title="98.2% Lolos Mutu • +320 Aktif Minggu Ini">
         <div class="stat-header">
           <span class="stat-title">TOTAL PRODUK AKTIF TAYANG</span>
-          <span class="stat-icon-wrap mint"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
         </div>
         <div class="stat-value-row">
           <strong class="stat-value">48.910</strong>
-          <span class="stat-badge-sm">A+1</span>
         </div>
         <div class="stat-footer-row">
-          <span class="pill-stat mint">+320 Aktif Minggu Ini</span>
-          <span class="subtext">98.2% Lolos Mutu</span>
+          <span class="pill-stat mint">+320 Minggu Ini</span>
         </div>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="Antrean Review Kurator SLA < 12 Jam">
         <div class="stat-header">
           <span class="stat-title">MENUNGGU KURASI KURATOR</span>
-          <span class="stat-icon-wrap orange"><svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></span>
         </div>
         <div class="stat-value-row">
-          <strong class="stat-value">38</strong>
-          <span class="subtext">Produk Antrean</span>
+          <strong class="stat-value">38 SKU</strong>
         </div>
         <div class="stat-footer-row">
-          <span class="pill-stat orange">● SLA Segera (SLA &lt; 12 Jam)</span>
+          <span class="pill-stat orange">SLA &lt; 12 Jam</span>
         </div>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="2 Keluhan Dimediasi • 0 DBK Status Terancam">
         <div class="stat-header">
           <span class="stat-title">LAPORAN PELANGGARAN / KLAIM</span>
-          <span class="stat-icon-wrap gray"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></span>
         </div>
         <div class="stat-value-row">
-          <strong class="stat-value">4</strong>
-          <span class="subtext">Perlu Tinjauan</span>
+          <strong class="stat-value">4 Laporan</strong>
         </div>
         <div class="stat-footer-row">
-          <span class="subtext">2 Keluhan Dimediasi</span>
-          <span class="subtext">0 DBK Status Terancam</span>
+          <span class="pill-stat gray">Perlu Tinjauan</span>
         </div>
       </article>
 
-      <article class="stat-card">
+      <article class="stat-card" title="HALAL 91% • BPOM 85% • P-IRT 97%">
         <div class="stat-header">
           <span class="stat-title">KOMODITAS TERSERTIFIKASI</span>
-          <span class="stat-icon-wrap green"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span>
         </div>
         <div class="stat-value-row">
           <strong class="stat-value">89.4%</strong>
-          <span class="subtext">Tercatat Resmi</span>
         </div>
         <div class="stat-footer-row">
-          <span class="subtext">HALAL 91%</span>
-          <span class="subtext">BPOM 85%</span>
-          <span class="subtext">P-IRT 97%</span>
+          <span class="pill-stat mint">Tercatat Resmi</span>
         </div>
       </article>
     </section>

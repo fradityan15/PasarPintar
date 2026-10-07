@@ -335,84 +335,47 @@ function toggleService(item: ApiIntegration) {
 
 <template>
   <div class="api-workspace">
-    <!-- Header Banner -->
-    <header class="api-header">
-      <div class="header-main">
-        <div class="header-badge">
-          <span class="pulse-dot"></span>
-          <span>PASARPINTAR INTEGRATION HUB</span>
-          <span class="divider">•</span>
-          <span>HOST-TO-HOST (H2H) GATEWAY</span>
-          <span class="divider">•</span>
-          <span>mTLS OAUTH2 ENCRYPTED</span>
-        </div>
+    <!-- Clean Page Header -->
+    <header class="page-heading">
+      <div class="heading-copy">
+        <div class="admin-breadcrumb">ADMIN CONSOLE &nbsp;›&nbsp; <b>INTEGRASI API & GATEWAY</b></div>
         <h1>Manajemen Integrasi API OSS & Gateway Bank</h1>
-        <p>
-          Pusat kendali konektivitas API nasional: Validasi NIB Sistem OSS RBA Kementerian Investasi, Gateway Rekber Himbara
-          (Mandiri, BRI, BNI, BSI), Webhook Logistik Afirmasi 3T Pos Indonesia, serta Validator BPJPH & BPOM.
-        </p>
       </div>
 
-      <div class="header-actions">
+      <div class="heading-actions">
         <button class="btn-secondary" type="button" @click="pingAllGateways">
-          <span class="icon">↻</span>
-          <span>Uji Ping Semua Gateway</span>
+          <span class="icon">↻</span> Uji Ping Semua Gateway
         </button>
         <button class="btn-primary" type="button" @click="isAddModalOpen = true">
-          <span class="icon">＋</span>
-          <span>Tambah Integrasi API</span>
+          <span class="icon">＋</span> Tambah Integrasi API
         </button>
       </div>
     </header>
 
-    <!-- Core Health KPI Cards -->
+    <!-- Clean Health KPI Cards -->
     <section class="kpi-grid">
-      <article class="kpi-card emerald-theme">
-        <div class="kpi-top">
-          <span class="kpi-label">Total Endpoints Terintegrasi</span>
-          <span class="kpi-icon">⌘</span>
-        </div>
+      <article class="kpi-card" title="100% Operational • 0 Outage">
+        <span class="kpi-label">Total Endpoints</span>
         <div class="kpi-val">{{ integrations.length }} <small>Gateway</small></div>
-        <div class="kpi-sub">
-          <span class="badge-mint">100% Operational</span>
-          <span>0 Outage</span>
-        </div>
+        <span class="delta-pill mint">100% Operational</span>
       </article>
 
-      <article class="kpi-card blue-theme">
-        <div class="kpi-top">
-          <span class="kpi-label">Rata-Rata Latensi H2H</span>
-          <span class="kpi-icon">⌁</span>
-        </div>
+      <article class="kpi-card" title="Optimal Speed • Target SLA < 50ms">
+        <span class="kpi-label">Rata-Rata Latensi H2H</span>
         <div class="kpi-val">17.8 <small>ms</small></div>
-        <div class="kpi-sub">
-          <span class="badge-blue">Optimal Speed</span>
-          <span>Target SLA &lt; 50ms</span>
-        </div>
+        <span class="delta-pill blue">Optimal Speed</span>
       </article>
 
-      <article class="kpi-card purple-theme">
-        <div class="kpi-top">
-          <span class="kpi-label">Total API Calls (Harian)</span>
-          <span class="kpi-icon">↔</span>
-        </div>
+      <article class="kpi-card" title="Success Rate 99.98% • Auto-Retry Active">
+        <span class="kpi-label">Total API Calls (Harian)</span>
         <div class="kpi-val">1.48 M <small>Req/Day</small></div>
-        <div class="kpi-sub">
-          <span class="badge-purple">Success Rate 99.98%</span>
-          <span>Auto-Retry Active</span>
-        </div>
+        <span class="delta-pill purple">Success 99.98%</span>
       </article>
 
-      <article class="kpi-card amber-theme">
-        <div class="kpi-top">
-          <span class="kpi-label">Protokol Keamanan & mTLS</span>
-          <span class="kpi-icon">◈</span>
-        </div>
+      <article class="kpi-card" title="ISO 8583 & 27001 • Signed Handshake">
+        <span class="kpi-label">Protokol Keamanan</span>
         <div class="kpi-val">mTLS <small>AES-256</small></div>
-        <div class="kpi-sub">
-          <span class="badge-amber">ISO 8583 & 27001</span>
-          <span>Signed Handshake</span>
-        </div>
+        <span class="delta-pill amber">ISO 8583 & 27001</span>
       </article>
     </section>
 

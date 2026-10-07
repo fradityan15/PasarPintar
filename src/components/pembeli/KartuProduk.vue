@@ -149,7 +149,7 @@ const handleToggleWishlist = (e: MouseEvent) => {
       <button
         type="button"
         class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#7A8C82] hover:text-[#E05A36] hover:bg-white shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0D7A5F]/40"
-        :class="{ 'text-[#E05A36]!': isWishlisted }"
+        :class="{ '!text-[#E05A36]': isWishlisted }"
         title="Simpan ke Wishlist"
         aria-label="Simpan ke Wishlist"
         @click="handleToggleWishlist"

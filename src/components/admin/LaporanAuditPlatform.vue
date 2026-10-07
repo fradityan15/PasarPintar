@@ -319,95 +319,55 @@ function downloadPresetReport(title: string) {
 
 <template>
   <div class="audit-workspace">
-    <!-- Header / Banner -->
-    <header class="audit-header">
-      <div class="header-main">
-        <div class="header-badge">
-          <span class="pulse-dot"></span>
-          <span>SISTEM LAHAN & AUDIT TRAIL IMMUTABLE</span>
-          <span class="divider">•</span>
-          <span>ISO 27001 CERTIFIED</span>
-          <span class="divider">•</span>
-          <span>UU PDP NO. 27/2022</span>
-        </div>
+    <!-- Clean Page Header -->
+    <header class="page-heading">
+      <div class="heading-copy">
+        <div class="admin-breadcrumb">ADMIN CONSOLE &nbsp;›&nbsp; <b>LAPORAN & AUDIT PLATFORM</b></div>
         <h1>Laporan Keuangan & Audit Forensik Platform</h1>
-        <p>
-          Pusat rekapitulasi laporan transaksi escrow, audit trail aktivitas admin real-time, penyampaian berkas kepatuhan
-          BPK RI & Kemenkop UMKM, serta verifikasi integritas checksum SHA-256.
-        </p>
       </div>
 
-      <div class="header-actions">
+      <div class="heading-actions">
         <button class="btn-secondary" type="button" @click="isBpkExportModalOpen = true">
-          <span class="icon">🏛</span>
-          <span>Paket Audit BPK RI</span>
+          <span class="icon">🏛</span> Paket Audit BPK RI
         </button>
         <button class="btn-primary" type="button" @click="isGenerateModalOpen = true">
-          <span class="icon">＋</span>
-          <span>Generate Laporan Baru</span>
+          <span class="icon">＋</span> Generate Laporan
         </button>
       </div>
     </header>
 
-    <!-- Top KPI Cards -->
+    <!-- Clean Top KPI Cards -->
     <section class="kpi-grid">
-      <article class="kpi-card emerald-theme">
-        <div class="kpi-top">
-          <span class="kpi-label">Total Log Audit Tercatat</span>
-          <span class="kpi-icon">▤</span>
-        </div>
+      <article class="kpi-card" title="Retensi 365 Hari • 100% Tamper-Proof Log Audit">
+        <span class="kpi-label">Total Log Audit</span>
         <div class="kpi-val">148,520 <small>Log</small></div>
-        <div class="kpi-sub">
-          <span class="badge-mint">Retensi 365 Hari</span>
-          <span>100% Tamper-Proof</span>
-        </div>
+        <span class="delta-pill mint">100% Tamper-Proof</span>
       </article>
 
-      <article class="kpi-card blue-theme">
-        <div class="kpi-top">
-          <span class="kpi-label">Laporan Rekonsiliasi Escrow</span>
-          <span class="kpi-icon">⌂</span>
-        </div>
+      <article class="kpi-card" title="100% Reconciled • 4 Bank Himbara H2H">
+        <span class="kpi-label">Rekonsiliasi Escrow</span>
         <div class="kpi-val">Rp 148,2 M <small>Q3-Q4</small></div>
-        <div class="kpi-sub">
-          <span class="badge-blue">100% Reconciled</span>
-          <span>4 Bank Himbara H2H</span>
-        </div>
+        <span class="delta-pill blue">100% Reconciled</span>
       </article>
 
-      <article class="kpi-card amber-theme">
-        <div class="kpi-top">
-          <span class="kpi-label">Perubahan Sensitif (24 Jam)</span>
-          <span class="kpi-icon">◈</span>
-        </div>
+      <article class="kpi-card" title="Wajib 2FA TOTP • Dual Control Enforced">
+        <span class="kpi-label">Perubahan Sensitif (24 Jam)</span>
         <div class="kpi-val">12 <small>Aktivitas</small></div>
-        <div class="kpi-sub">
-          <span class="badge-amber">Wajib 2FA TOTP</span>
-          <span>Dual Control Enforced</span>
-        </div>
+        <span class="delta-pill amber">2FA Enforced</span>
       </article>
 
-      <article class="kpi-card purple-theme">
-        <div class="kpi-top">
-          <span class="kpi-label">Skor Kepatuhan Audit (Compliance)</span>
-          <span class="kpi-icon">✓</span>
-        </div>
+      <article class="kpi-card" title="BPK Ready • ISO 27001 Standard">
+        <span class="kpi-label">Skor Kepatuhan Audit</span>
         <div class="kpi-val">99.8% <small>Grade A+</small></div>
-        <div class="kpi-sub">
-          <span class="badge-purple">BPK Ready</span>
-          <span>ISO 27001 Standard</span>
-        </div>
+        <span class="delta-pill purple">BPK Ready</span>
       </article>
     </section>
 
-    <!-- Preset Reports Download Grid -->
+    <!-- Clean Preset Reports Section -->
     <section class="reports-section">
       <div class="section-title">
-        <div>
-          <h2>Laporan Resmi Platform & Berkas Audit Siap Unduh</h2>
-          <p>Dokumen rekapitulasi finansial dan operasional yang telah disahkan dengan sertifikat digital SHA-256.</p>
-        </div>
-        <span class="reports-counter">{{ presetReports.length }} Dokumen Siap Unduh</span>
+        <h2>Dokumen & Berkas Audit Siap Unduh</h2>
+        <span class="reports-counter">{{ presetReports.length }} Dokumen</span>
       </div>
 
       <div class="preset-grid">
@@ -417,15 +377,10 @@ function downloadPresetReport(title: string) {
             <span class="preset-format">{{ report.format }}</span>
           </div>
           <h3>{{ report.title }}</h3>
-          <p>{{ report.description }}</p>
-          <div class="preset-meta">
-            <span>📅 Periode: <b>{{ report.period }}</b></span>
-            <span>💾 Ukuran: <b>{{ report.size }}</b></span>
-          </div>
           <div class="preset-footer">
-            <small>Diunduh {{ report.downloadCount }}x oleh Auditor</small>
+            <small>Diunduh {{ report.downloadCount }}x</small>
             <button class="btn-download" type="button" @click="downloadPresetReport(report.title)">
-              <span>⤓ Unduh Dokumen</span>
+              ⤓ Unduh PDF
             </button>
           </div>
         </article>
@@ -675,44 +630,48 @@ function downloadPresetReport(title: string) {
             <div class="forensic-card">
               <small>INFORMASI KRONOLOGIS</small>
               <table class="meta-table">
-                <tr>
-                  <td>Waktu Kejadian</td>
-                  <td><b>{{ selectedLog.timestamp }}</b></td>
-                </tr>
-                <tr>
-                  <td>Aktor / Pengguna</td>
-                  <td><b>{{ selectedLog.actorName }}</b> ({{ selectedLog.actorRole }})</td>
-                </tr>
-                <tr>
-                  <td>Alamat IP</td>
-                  <td><code>{{ selectedLog.ipAddress }}</code></td>
-                </tr>
-                <tr>
-                  <td>Tingkat Risiko</td>
-                  <td><span :class="['sev-badge', selectedLog.severity.toLowerCase()]">{{ selectedLog.severity }}</span></td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <td>Waktu Kejadian</td>
+                    <td><b>{{ selectedLog.timestamp }}</b></td>
+                  </tr>
+                  <tr>
+                    <td>Aktor / Pengguna</td>
+                    <td><b>{{ selectedLog.actorName }}</b> ({{ selectedLog.actorRole }})</td>
+                  </tr>
+                  <tr>
+                    <td>Alamat IP</td>
+                    <td><code>{{ selectedLog.ipAddress }}</code></td>
+                  </tr>
+                  <tr>
+                    <td>Tingkat Risiko</td>
+                    <td><span :class="['sev-badge', selectedLog.severity.toLowerCase()]">{{ selectedLog.severity }}</span></td>
+                  </tr>
+                </tbody>
               </table>
             </div>
 
             <div class="forensic-card">
               <small>AKSI & TARGET</small>
               <table class="meta-table">
-                <tr>
-                  <td>Kategori</td>
-                  <td><b>{{ selectedLog.category }}</b></td>
-                </tr>
-                <tr>
-                  <td>Aksi Event ID</td>
-                  <td><code>{{ selectedLog.action }}</code></td>
-                </tr>
-                <tr>
-                  <td>Entitas Target</td>
-                  <td><b>{{ selectedLog.targetEntity }}</b></td>
-                </tr>
-                <tr>
-                  <td>User Agent Browser</td>
-                  <td><small class="code-sm">{{ selectedLog.userAgent }}</small></td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <td>Kategori</td>
+                    <td><b>{{ selectedLog.category }}</b></td>
+                  </tr>
+                  <tr>
+                    <td>Aksi Event ID</td>
+                    <td><code>{{ selectedLog.action }}</code></td>
+                  </tr>
+                  <tr>
+                    <td>Entitas Target</td>
+                    <td><b>{{ selectedLog.targetEntity }}</b></td>
+                  </tr>
+                  <tr>
+                    <td>User Agent Browser</td>
+                    <td><small class="code-sm">{{ selectedLog.userAgent }}</small></td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>

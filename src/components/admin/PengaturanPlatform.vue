@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import AdminAnalytics from './AdminAnalytics.vue'
-import UserAccessManagement from './UserAccessManagement.vue'
-import CategoryRegionManagement from './CategoryRegionManagement.vue'
-import EscrowMonitoring from './EscrowMonitoring.vue'
-import ProductCurationManagement from './ProductCurationManagement.vue'
-import StoreLegalityDetail from './StoreLegalityDetail.vue'
-import PlatformSummary from './PlatformSummary.vue'
-import DisbursementGbbiSubsidy from './DisbursementGbbiSubsidy.vue'
-import PlatformAuditReports from './PlatformAuditReports.vue'
-import ApiOssBankIntegration from './ApiOssBankIntegration.vue'
+import AdminAnalytics from './AnalisisAdmin.vue'
+import UserAccessManagement from './KelolaAksesPengguna.vue'
+import CategoryRegionManagement from './KelolaKategoriWilayah.vue'
+import EscrowMonitoring from './PantauRekber.vue'
+import ProductCurationManagement from './KurasiProduk.vue'
+import StoreLegalityDetail from './DetailLegalitasToko.vue'
+import PlatformSummary from './RingkasanPlatform.vue'
+import DisbursementGbbiSubsidy from './PencairanSubsidiGbbi.vue'
+import PlatformAuditReports from './LaporanAuditPlatform.vue'
+import ApiOssBankIntegration from './IntegrasiApiOssBank.vue'
 
 const emit = defineEmits<{ backToStore: [] }>()
-const activeSection = ref('Ringkasan Platform')
+const activeSection = ref('Pengaturan Platform')
 const activeTab = ref('Subsidi Kargo & Afirmasi 3T')
 const subsidyEnabled = ref(true)
 const subsidyPercent = ref(65)
@@ -31,10 +31,37 @@ const toastMessage = ref('')
 let toastTimer: ReturnType<typeof setTimeout> | undefined
 
 const navigation = [
-  { group: 'UTAMA', items: ['Ringkasan Platform', 'Statistik & Analisis Nasional'] },
-  { group: 'MANAJEMEN ENTITAS', items: ['Verifikasi Toko & UMKM', 'Katalog & Kurasi Produk', 'Manajemen Pengguna', 'Kategori & Sentra Daerah'] },
-  { group: 'TRANSAKSI & KEUANGAN', items: ['Monitoring Rekber', 'Pencairan & Subsidi GBBI', 'Laporan & Audit Platform'] },
-  { group: 'SISTEM & KONFIGURASI', items: ['Integrasi API OSS/Bank', 'Pengaturan Platform'] },
+  {
+    group: 'UTAMA',
+    items: [
+      { id: 'Ringkasan Platform', label: 'Ringkasan', icon: '📊' },
+      { id: 'Statistik & Analisis Nasional', label: 'Statistik & Analisis', icon: '📈' },
+    ],
+  },
+  {
+    group: 'MANAJEMEN',
+    items: [
+      { id: 'Verifikasi Toko & UMKM', label: 'Verifikasi Toko', icon: '🏬' },
+      { id: 'Katalog & Kurasi Produk', label: 'Katalog & Kurasi', icon: '📦' },
+      { id: 'Manajemen Pengguna', label: 'Pengguna', icon: '👥' },
+      { id: 'Kategori & Sentra Daerah', label: 'Kategori & Sentra', icon: '🗺️' },
+    ],
+  },
+  {
+    group: 'TRANSAKSI',
+    items: [
+      { id: 'Monitoring Rekber', label: 'Monitoring Rekber', icon: '🛡️' },
+      { id: 'Pencairan & Subsidi GBBI', label: 'Pencairan & Subsidi', icon: '💳' },
+      { id: 'Laporan & Audit Platform', label: 'Laporan & Audit', icon: '📑' },
+    ],
+  },
+  {
+    group: 'KONFIGURASI',
+    items: [
+      { id: 'Integrasi API OSS/Bank', label: 'Integrasi API', icon: '🔌' },
+      { id: 'Pengaturan Platform', label: 'Pengaturan', icon: '⚙️' },
+    ],
+  },
 ]
 const tabs = [
   { label: 'Umum & Profil Platform', target: 'platform-overview', icon: '▱' },
@@ -101,15 +128,54 @@ function resetDefaults() {
 <template>
   <main class="admin-shell">
     <aside class="admin-sidebar">
-      <button class="admin-brand" type="button" aria-label="Kembali ke PasarPintar" @click="emit('backToStore')"><span class="admin-brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1.2 10H5.2L4 9Z"/><path d="M8 9V6a4 4 0 0 1 8 0v3M9 13h6M9 16h6"/></svg></span><span><b>PasarPintar</b><small>ADMIN<br/>CONSOLE</small></span></button>
+      <button class="admin-brand" type="button" aria-label="Kembali ke PasarPintar" @click="emit('backToStore')">
+        <span class="admin-brand-mark">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1.2 10H5.2L4 9Z"/><path d="M8 9V6a4 4 0 0 1 8 0v3M9 13h6M9 16h6"/></svg>
+        </span>
+        <span><b>PasarPintar</b><small>ADMIN CONSOLE</small></span>
+      </button>
       <nav class="admin-nav" aria-label="Navigasi admin">
-        <section v-for="group in navigation" :key="group.group"><h2>{{ group.group }}</h2><button v-for="item in group.items" :key="item" type="button" :class="{ selected: activeSection === item }" :aria-current="activeSection === item ? 'page' : undefined" @click="goToSection(item)">{{ item }}</button></section>
+        <section v-for="group in navigation" :key="group.group">
+          <h2>{{ group.group }}</h2>
+          <button
+            v-for="item in group.items"
+            :key="item.id"
+            type="button"
+            :class="{ selected: activeSection === item.id }"
+            :aria-current="activeSection === item.id ? 'page' : undefined"
+            @click="goToSection(item.id)"
+          >
+            <span class="nav-icon">{{ item.icon }}</span>
+            <span>{{ item.label }}</span>
+          </button>
+        </section>
       </nav>
-      <div class="sidebar-bottom"><button type="button" @click="emit('backToStore')"><span><b>Kunjungi Marketplace</b><small>Platform Enterprise</small></span><i>↗</i></button><small>PasarPintar Enterprise <b>v2.4.0</b></small></div>
+      <div class="sidebar-bottom">
+        <button type="button" class="btn-marketplace-link" @click="emit('backToStore')">
+          Kunjungi Marketplace ↗
+        </button>
+      </div>
     </aside>
 
     <section class="admin-workspace">
-      <header class="admin-topbar"><div class="portal-label"><i></i><span>PORTAL PENGELOLA<br/><b>PLATFORM</b></span></div><div class="server-health"><span>⌁</span><span>Server Normal ·<br/><b>24ms</b></span></div><label class="admin-search"><span>⌕</span><input type="search" placeholder="Cari toko UMKM, NIB, transaksi, produk..." aria-label="Cari di konsol admin"/><kbd>⌘ K</kbd></label><button class="quick-action" type="button" @click="saveChanges"><span>＋</span><b>Aksi<br/>Cepat</b></button><button class="top-icon" type="button" aria-label="Notifikasi" @click="notify('Tidak ada notifikasi baru.')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><i></i></button><button class="admin-avatar" type="button" aria-label="Akun Hendri Wijaya" @click="notify('Masuk sebagai Hendri Wijaya, Super Admin.')">H</button></header>
+      <header class="admin-topbar">
+        <label class="admin-search">
+          <span>⌕</span>
+          <input type="search" placeholder="Cari toko UMKM, NIB, transaksi, produk..." aria-label="Cari di konsol admin"/>
+          <kbd>⌘ K</kbd>
+        </label>
+        <button class="quick-action" type="button" @click="saveChanges">
+          <span>＋</span><b>Aksi Cepat</b>
+        </button>
+        <button class="top-icon" type="button" aria-label="Notifikasi" @click="notify('Tidak ada notifikasi baru.')">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+          <i></i>
+        </button>
+        <div class="avatar-wrap" title="Portal Pengelola Platform · Server Normal (24ms)">
+          <button class="admin-avatar" type="button" aria-label="Akun Hendri Wijaya" @click="notify('Masuk sebagai Hendri Wijaya, Super Admin.')">H</button>
+          <span class="status-dot-online" title="Server Normal · 24ms"></span>
+        </div>
+      </header>
 
       <PlatformSummary v-if="activeSection === 'Ringkasan Platform'" @notify="notify" @navigate-to-section="goToSection" />
       <AdminAnalytics v-else-if="activeSection === 'Statistik & Analisis Nasional'" />
@@ -122,9 +188,28 @@ function resetDefaults() {
       <ProductCurationManagement v-else-if="activeSection === 'Katalog & Kurasi Produk'" @notify="notify" />
       <StoreLegalityDetail v-else-if="activeSection === 'Verifikasi Toko & UMKM'" @notify="notify" @back-to-verification-list="goToSection('Verifikasi Toko & UMKM')" />
       <div v-else class="admin-content">
-        <div class="page-heading" id="platform-overview"><div class="heading-copy"><div class="admin-breadcrumb">▣ &nbsp; PORTAL SUPER ADMIN &nbsp;›&nbsp; SISTEM & KONFIGURASI &nbsp;›&nbsp; <b>PENGATURAN PLATFORM</b></div><h1>Pengaturan Sistem &<br/>Konfigurasi Platform</h1><p>Pusat tata kelola konfigurasi global, parameter afirmasi subsidi kargo daerah 3T, integrasi API nasional (OSS, Kemenkop, Bank Himbara), SLA kurasi & transaksi, serta kebijakan kepatuhan regulasi keamanan ISO 27001.</p></div><div class="heading-actions"><button type="button" @click="historyOpen = true">◷ &nbsp; Riwayat Versi</button><button class="reset" type="button" @click="resetDefaults">↻ &nbsp; Reset Default</button><button class="save" type="button" @click="saveChanges">✓ &nbsp; Simpan Perubahan</button></div></div>
+        <div class="page-heading" id="platform-overview">
+          <div class="heading-copy">
+            <div class="admin-breadcrumb">ADMIN CONSOLE &nbsp;›&nbsp; <b>PENGATURAN PLATFORM</b></div>
+            <h1>Pengaturan Sistem &amp; Konfigurasi</h1>
+          </div>
+          <div class="heading-actions">
+            <button type="button" @click="historyOpen = true">◷ Riwayat Versi</button>
+            <button class="reset" type="button" @click="resetDefaults">↻ Reset Default</button>
+            <button class="save" type="button" @click="saveChanges">✓ Simpan Perubahan</button>
+          </div>
+        </div>
 
-        <section class="cluster-status"><div class="cluster-main"><span class="cluster-icon">▤</span><div><b><i></i> Production Cluster ID-JKTI</b><small>Uptime: <strong>99.98%</strong> &nbsp;•&nbsp; Latensi Himbara: <strong>24ms</strong></small></div><span class="version">v2.4.0</span></div><div class="updated">♧ &nbsp; Diperbarui oleh: Hendri Wijaya (Super Admin) · 26 Okt 2024, 09:15 WIB</div><div class="cluster-meta"><span>KEAMANAN & ENKRIPSI <b>◈ &nbsp; AES-256 GCM · ISO 27001 Certified</b></span><i></i><span>KONEKTIVITAS EKSTERNAL <b>↔ &nbsp; Kemen dag & OSS RBA Normal</b></span></div></section>
+        <section class="cluster-status">
+          <div class="cluster-main">
+            <span class="cluster-icon">▤</span>
+            <div>
+              <b>Production Cluster ID-JKTI</b>
+              <small>Uptime: 99.98% • Latensi: 24ms</small>
+            </div>
+            <span class="version">v2.4.0</span>
+          </div>
+        </section>
 
         <nav class="settings-tabs" aria-label="Bagian pengaturan"><button v-for="tab in tabs" :key="tab.label" type="button" :class="{ active: activeTab === tab.label }" :aria-pressed="activeTab === tab.label" @click="selectTab(tab)"><span>{{ tab.icon }}</span>{{ tab.label }}</button></nav>
 
@@ -330,27 +415,35 @@ function resetDefaults() {
 }
 
 .admin-nav h2 {
-  margin: 0 0 4px 6px;
-  color: #64748b;
-  font-size: 10.5px;
-  font-weight: 800;
+  margin: 12px 0 4px 8px;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 600;
   letter-spacing: 0.8px;
   text-transform: uppercase;
 }
 
 .admin-nav section button {
   width: 100%;
-  min-height: 34px;
-  display: block;
-  padding: 7px 10px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
   border: 0;
   border-radius: 8px;
   color: #475569;
   background: transparent;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   text-align: left;
   transition: all 0.15s ease;
+  margin-bottom: 2px;
+}
+
+.nav-icon {
+  font-size: 14px;
+  line-height: 1;
 }
 
 .admin-nav section button:hover {
@@ -361,8 +454,8 @@ function resetDefaults() {
 .admin-nav section button.selected {
   color: #ffffff;
   background: #059669;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+  font-weight: 600;
+  box-shadow: none;
 }
 
 .sidebar-bottom {
@@ -371,21 +464,20 @@ function resetDefaults() {
   border-top: 1px solid #f1f5f9;
 }
 
-.sidebar-bottom > button {
+.btn-marketplace-link {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 9px 12px;
-  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
   color: #059669;
   background: #f8fafc;
-  text-align: left;
+  font-size: 12.5px;
+  font-weight: 600;
   transition: all 0.15s ease;
+  text-align: center;
 }
 
-.sidebar-bottom > button:hover {
+.btn-marketplace-link:hover {
   background: #ecfdf5;
   border-color: #a7f3d0;
 }
@@ -393,32 +485,24 @@ function resetDefaults() {
 .sidebar-bottom > button span {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .sidebar-bottom > button b {
-  font-size: 12.5px;
+  font-size: 12px;
   color: #0f172a;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .sidebar-bottom > button small {
   color: #64748b;
-  font-size: 11px;
+  font-size: 10.5px;
 }
 
 .sidebar-bottom > button i {
   font-style: normal;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.sidebar-bottom > small {
-  display: flex;
-  justify-content: space-between;
-  margin: 8px 4px 0;
-  color: #94a3b8;
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 /* Workspace Layout */
@@ -431,7 +515,7 @@ function resetDefaults() {
 
 /* Topbar */
 .admin-topbar {
-  min-height: 60px;
+  min-height: 56px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -444,56 +528,15 @@ function resetDefaults() {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
-.portal-label,
-.server-health {
-  min-height: 34px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  line-height: 1.25;
-  font-weight: 700;
-}
-
-.portal-label {
-  color: #047857;
-  background: #ecfdf5;
-  border: 1px solid #a7f3d0;
-}
-
-.portal-label i {
-  width: 7px;
-  height: 7px;
-}
-
-.server-health {
-  color: #15803d;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-}
-
-.server-health > span:first-child {
-  width: 18px;
-  height: 18px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  color: white;
-  background: #16a34a;
-  font-size: 12px;
-}
-
 .admin-search {
-  height: 38px;
-  min-width: 180px;
+  height: 36px;
+  min-width: 200px;
   flex: 1;
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 0 12px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   color: #64748b;
   background: #f8fafc;
@@ -501,13 +544,13 @@ function resetDefaults() {
 }
 
 .admin-search:focus-within {
-  border-color: #10b981;
+  border-color: #059669;
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
 }
 
 .admin-search > span {
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .admin-search input {
@@ -517,7 +560,7 @@ function resetDefaults() {
   outline: 0;
   color: #1e293b;
   background: transparent;
-  font-size: 13.5px;
+  font-size: 13px;
 }
 
 .admin-search input::placeholder {
@@ -526,30 +569,30 @@ function resetDefaults() {
 
 .admin-search kbd {
   flex: none;
-  padding: 2px 6px;
+  padding: 2px 5px;
   border: 1px solid #cbd5e1;
   border-radius: 4px;
   color: #64748b;
   background: #ffffff;
   font-family: inherit;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
 }
 
 .quick-action {
-  min-width: 100px;
-  height: 38px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   padding: 0 14px;
   border: 0;
   border-radius: 8px;
   color: white;
   background: #e11d48;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
   transition: background 0.15s ease;
 }
 
@@ -558,7 +601,7 @@ function resetDefaults() {
 }
 
 .quick-action > span {
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .top-icon {
@@ -576,6 +619,23 @@ function resetDefaults() {
 
 .top-icon:hover {
   background: #f8fafc;
+}
+
+.avatar-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.status-dot-online {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 1.5px solid #ffffff;
 }
 
 .top-icon svg {

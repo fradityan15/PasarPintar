@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import ProductCard from './components/ProductCard.vue'
-import CartCheckout from './components/CartCheckout.vue'
-import ProductDetail, { type ProductDetailData } from './components/ProductDetail.vue'
-import AuthPage from './components/AuthPage.vue'
-import OrderTracking from './components/OrderTracking.vue'
-import PlatformSettings from './components/PlatformSettings.vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import ProductCard from './components/pembeli/KartuProduk.vue'
+import CartCheckout from './components/pembeli/KeranjangPembayaran.vue'
+import ProductDetail, { type ProductDetailData } from './components/pembeli/DetailProduk.vue'
+import AuthPage from './components/pembeli/HalamanAutentikasi.vue'
+import OrderTracking from './components/pembeli/PelacakanPesanan.vue'
+import PlatformSettings from './components/admin/PengaturanPlatform.vue'
+import SellerOrderManagement from './components/penjual/KelolaPesananPenjual.vue'
 
 interface CartLine {
   id: string
@@ -24,7 +25,7 @@ interface CartLine {
 
 const searchQuery = ref('')
 const searchCategory = ref('')
-const currentView = ref<'home' | 'cart' | 'detail' | 'auth' | 'tracking' | 'admin'>('home')
+const currentView = ref<'home' | 'cart' | 'detail' | 'auth' | 'tracking' | 'seller' | 'admin'>('home')
 const authMode = ref<'login' | 'register'>('login')
 const isAuthenticated = ref(false)
 const accountName = ref('')
@@ -75,13 +76,96 @@ const notificationItems = ref([
 const cartCount = computed(() => cartItems.value.reduce((count, item) => count + item.quantity, 0))
 const unreadNotificationCount = computed(() => notificationItems.value.filter((notification) => !notification.read).length)
 
+const currentSlide = ref(0)
+let slideTimer: ReturnType<typeof setInterval> | undefined
+
+const heroBanners = [
+  {
+    title: 'PasarPintar Pilih Lokal',
+    subtitle: 'Rumah Produk Lokal No. 1 di Indonesia',
+    tag: 'GERAKAN NASIONAL BANGGA BUATAN INDONESIA',
+    description: 'Dukung perajin, petani rempah, dan produsen rumahan dari 38 provinsi di Nusantara.',
+    image: 'https://images.unsplash.com/photo-1531058020387-3be344556be6?w=1200&q=88',
+    ctaText: 'Jelajahi Katalog',
+    ctaLink: '#produk',
+  },
+  {
+    title: 'Koleksi Wastra & Tenun Sumba',
+    subtitle: 'Sentra Batik Tulis & Tenun Ikat Asli',
+    tag: 'WARISAN BUDAYA NUSANTARA',
+    description: 'Karya perajin lokal dengan pewarna alami tradisional.',
+    image: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=1200&q=88',
+    ctaText: 'Lihat Batik & Tenun',
+    ctaLink: '#produk',
+  },
+  {
+    title: 'Kopi Arabika Bajawa Single Origin',
+    subtitle: 'Petik Merah Lereng Gunung Inerie',
+    tag: 'FLORES BAJAWA LOKAL',
+    description: 'Cita rasa cokelat & buah segar khas dataran tinggi NTT.',
+    image: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=1200&q=88',
+    ctaText: 'Pesan Kopi Bajawa',
+    ctaLink: '#produk',
+  },
+]
+
+function nextSlide() {
+  currentSlide.value = (currentSlide.value + 1) % heroBanners.length
+}
+
+function prevSlide() {
+  currentSlide.value = (currentSlide.value - 1 + heroBanners.length) % heroBanners.length
+}
+
+function setSlide(index: number) {
+  currentSlide.value = index
+}
+
+onMounted(() => {
+  slideTimer = setInterval(() => {
+    nextSlide()
+  }, 5000)
+})
+
+onUnmounted(() => {
+  if (slideTimer) clearInterval(slideTimer)
+})
+
+const quickLinks = [
+  { name: 'Pilih Lokal', icon: '🇮🇩', filter: 'Semua Pilihan', badge: 'Terbaru' },
+  { name: 'Mall UMKM', icon: '🏪', filter: 'Semua Pilihan', badge: '100% Ori' },
+  { name: 'Bebas Ongkir', icon: '🚚', filter: 'Semua Pilihan', badge: 'Afirmasi 3T' },
+  { name: 'Flash Sale', icon: '♨️', action: 'promo', badge: 'Diskon' },
+  { name: 'Kopi & Teh', icon: '☕', filter: 'Kuliner Nusantara' },
+  { name: 'Batik & Tenun', icon: '🧵', filter: 'Wastra & Kriya' },
+  { name: 'Voucher GBBI', icon: '🎟️', filter: 'Semua Pilihan', badge: 'Diskon' },
+  { name: 'Lacak Pesanan', icon: '📦', action: 'tracking' },
+  { name: 'Garansi Retur', icon: '🛡️', action: 'help' },
+  { name: 'Semua Promo', icon: '⚡', action: 'promo' },
+]
+
+function handleQuickShortcut(item: (typeof quickLinks)[number]) {
+  if (item.filter) {
+    selectProductFilter(item.filter)
+    submitSearch()
+  } else if (item.action === 'tracking') {
+    openTracking()
+  } else if (item.action === 'promo') {
+    document.getElementById('promo')?.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
 const categories = [
   { name: 'Camilan & Keripik', count: '1.420 Produk', image: 'photo-1566478989037-eec170784d0b' },
   { name: 'Kopi & Teh Herbal', count: '890 Produk', image: 'photo-1442512595331-e89e73853f31' },
   { name: 'Batik & Tenun', count: '2.150 Produk', image: 'photo-1605000797499-95a51c5269ae' },
   { name: 'Kriya & Anyaman', count: '760 Produk', image: 'photo-1490312278390-ab64016e0aa9' },
   { name: 'Herbal & Perawatan', count: '640 Produk', image: 'photo-1608571423902-eed4a5ad8108' },
-  { name: 'Sambal & Bumbu Asli', count: '1.080 Produk', image: 'photo-1601050690597-df0568f70950' },
+  { name: 'Sambal & Bumbu', count: '1.080 Produk', image: 'photo-1601050690597-df0568f70950' },
+  { name: 'Madu & Suplemen', count: '520 Produk', image: 'photo-1587049352851-8d4e89133924' },
+  { name: 'Peralatan Jati', count: '430 Produk', image: 'photo-1610701596007-11502861dcfa' },
+  { name: 'Beras & Pangan', count: '910 Produk', image: 'photo-1586201375761-83865001e31c' },
+  { name: 'Oleh-oleh Khas', count: '1.250 Produk', image: 'photo-1531058020387-3be344556be6' },
 ]
 
 const saleProducts = [
@@ -151,6 +235,13 @@ const recommendedProducts = [
   { id: saleProducts[1]!.id, name: saleProducts[1]!.name, price: saleProducts[1]!.price, imageUrl: saleProducts[1]!.imageUrl, imageAlt: saleProducts[1]!.imageAlt, location: saleProducts[1]!.location },
 ]
 
+const heroProducts = computed(() => [
+  coffeeProduct,
+  curatedProducts[1]!,
+  saleProducts[0]!,
+  curatedProducts[3]!,
+])
+
 const searchableProducts = computed(() => [
   ...curatedProducts,
   ...saleProducts.map((product) => ({ ...product, group: 'Kuliner Nusantara', badge: 'Promo Lokal' })),
@@ -208,6 +299,13 @@ function openAdmin() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+function openSellerPortal() {
+  activeHeaderPanel.value = null
+  mobileUtilitiesOpen.value = false
+  currentView.value = 'seller'
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 function applySearchCategory(event: Event) {
   const category = (event.target as HTMLSelectElement).value
   searchCategory.value = category
@@ -260,6 +358,7 @@ function completeAuth(account: { name: string; email: string }) {
   isAuthenticated.value = true
   accountName.value = account.name
   accountEmail.value = account.email
+  if (authMode.value === 'register') return
   currentView.value = 'home'
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
@@ -328,7 +427,7 @@ function subscribe() {
 </script>
 
 <template>
-  <main v-if="currentView !== 'admin'" class="storefront">
+  <main v-if="currentView !== 'admin' && currentView !== 'seller'" class="storefront">
     <template v-if="currentView !== 'auth'">
     <div class="announcement-bar">
       <div class="announcement-inner">
@@ -338,6 +437,7 @@ function subscribe() {
         <div id="mobile-utility-links" class="announcement-links" :class="{ open: mobileUtilitiesOpen }">
           <a href="#bantuan" @click="mobileUtilitiesOpen = false">Pusat Bantuan</a>
           <a href="#pesanan" @click.prevent="openTracking">Lacak Pesanan</a>
+          <a href="#seller" @click.prevent="openSellerPortal">Portal Penjual</a>
           <a href="#admin" @click.prevent="openAdmin">Portal Pengelola</a>
           <a href="#daftar" @click="mobileUtilitiesOpen = false">◈ Gerakan Bangga Buatan ID</a>
           <div class="mobile-account-actions">
@@ -386,64 +486,135 @@ function subscribe() {
         </section>
       </div>
 
-      <nav class="category-nav">
-        <div class="page-width nav-inner">
-          <a class="all-categories" href="#kategori" @click="selectProductFilter('Semua Pilihan')"><span>▦</span> Semua Kategori</a>
-          <a href="#produk" @click.prevent="selectProductFilter('Kuliner Nusantara'); submitSearch()">Makanan & Camilan</a>
-          <a href="#produk" @click.prevent="selectProductFilter('Kuliner Nusantara'); submitSearch()">Kopi & Minuman</a>
-          <a href="#produk" @click.prevent="selectProductFilter('Wastra & Kriya'); submitSearch()">Batik & Tenun</a>
-          <a href="#produk" @click.prevent="selectProductFilter('Kriya Rumah'); submitSearch()">Kriya & Kerajinan</a>
-          <a href="#produk" @click.prevent="selectProductFilter('Kriya Rumah'); submitSearch()">Herbal & Perawatan</a>
-          <a href="#produk" @click.prevent="selectProductFilter('Kuliner Nusantara'); submitSearch()">Oleh-oleh Khas</a>
-          <span class="nav-spacer"></span>
-          <a class="promo-link" href="#promo"><span>♨</span> Promo Lokal</a>
-          <a href="#cerita"><span>♧</span> Cerita UMKM</a>
-        </div>
-      </nav>
     </header>
     </template>
 
     <template v-if="currentView === 'home'">
-    <section id="beranda" class="hero-section">
-      <div class="page-width hero-content">
-        <div class="hero-copy">
-          <span class="eyebrow"><span class="verified-dot">✓</span> Gerakan Nasional Bangga Buatan Indonesia</span>
-          <h1>Dukung Produk Lokal,<br /><em>Berdayakan UMKM</em> Nusantara.</h1>
-          <p>Platform kurasi modern untuk berbelanja langsung dari tangan pengrajin, petani rempah, dan produsen rumahan dari 38 provinsi di seluruh Nusantara.</p>
-          <div class="hero-buttons">
-            <a class="button-primary" href="#kategori">Jelajahi Katalog <span>→</span></a>
-            <a class="button-secondary" href="#promo"><span class="flame">♨</span> Promo Bangga Lokal</a>
+    <section id="beranda" class="marketplace-hero page-width">
+      <!-- Top Banners Grid (Main Carousel + 2 Stacked Side Banners) -->
+      <div class="hero-banners-grid">
+        <!-- Left Main Banner Carousel -->
+        <div class="main-carousel">
+          <div
+            v-for="(banner, idx) in heroBanners"
+            :key="banner.title"
+            class="carousel-slide"
+            :class="{ active: currentSlide === idx }"
+          >
+            <img :src="banner.image" :alt="banner.title" loading="lazy" />
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+              <span class="slide-tag"><span>✓</span> {{ banner.tag }}</span>
+              <h2>{{ banner.title }}</h2>
+              <p class="slide-subtitle">{{ banner.subtitle }}</p>
+              <p class="slide-desc">{{ banner.description }}</p>
+              <a class="slide-btn" :href="banner.ctaLink" @click.prevent="selectProductFilter('Semua Pilihan'); submitSearch()">
+                {{ banner.ctaText }} <span>→</span>
+              </a>
+            </div>
           </div>
-          <div class="hero-stats">
-            <div><strong>5.800<span>+</span></strong><small>Pengrajin & Petani</small></div>
-            <div><strong class="green-stat">100<span>%</span></strong><small>Kurasi Asli Lokal</small></div>
-            <div><strong>38 <span>Prov</span></strong><small>Jangkauan Ekspedisi</small></div>
+
+          <!-- Carousel Controls -->
+          <button class="carousel-nav prev" type="button" aria-label="Slide sebelumnya" @click="prevSlide">‹</button>
+          <button class="carousel-nav next" type="button" aria-label="Slide berikutnya" @click="nextSlide">›</button>
+          <div class="carousel-dots">
+            <button
+              v-for="(_, idx) in heroBanners"
+              :key="idx"
+              type="button"
+              :class="{ active: currentSlide === idx }"
+              :aria-label="`Slide ${idx + 1}`"
+              @click="setSlide(idx)"
+            ></button>
+          </div>
+
+          <!-- Banner Bottom Strip (3 Badges) -->
+          <div class="banner-bottom-strip">
+            <div class="banner-strip-item">
+              <span class="strip-icon">🌿</span>
+              <span><b>Produk Unik</b><small>Asli Indonesia</small></span>
+            </div>
+            <span class="strip-divider"></span>
+            <div class="banner-strip-item">
+              <span class="strip-icon">⚡</span>
+              <span><b>Inovasi Lokal</b><small>Rasa Global</small></span>
+            </div>
+            <span class="strip-divider"></span>
+            <div class="banner-strip-item">
+              <span class="strip-icon">🏅</span>
+              <span><b>Kualitas Unggulan</b><small>Kreasi Nusantara</small></span>
+            </div>
           </div>
         </div>
-        <div class="hero-visual">
-          <img src="https://images.unsplash.com/photo-1531058020387-3be344556be6?w=1400&q=90" alt="Suasana pasar lokal dengan produk kerajinan Indonesia" />
-          <div class="hero-image-shade"></div>
-          <button class="floating-product floating-product-top" type="button" aria-label="Lihat detail Kopi Arabika Flores Bajawa" @click="openProduct('coffee-flores')"><span class="floating-thumb"><img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=100&q=75" alt="" /></span><span><small>Bajawa, Flores</small><b>Kopi Arabika Flores</b><strong>Rp 68.000</strong></span></button>
-          <div class="hero-image-caption"><span>◉</span> Sentra Tenun Jepara & Kopi Pilihan</div>
-          <div class="floating-product floating-product-bottom"><span class="floating-thumb"><img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=100&q=75" alt="" /></span><span><small>★★★★★ &nbsp; 4.9 (128)</small><b>Selendang Lasem</b><strong>Rp 245.000</strong></span></div>
+
+        <!-- Right Side Banners -->
+        <div class="side-banners">
+          <div class="side-banner side-banner-top" @click="selectProductFilter('Wastra & Kriya'); submitSearch()">
+            <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&q=85" alt="PasarPintar Mall 100% Ori" />
+            <div class="side-banner-overlay"></div>
+            <div class="side-banner-content">
+              <span class="side-badge">PasarPintar Mall</span>
+              <h3>100% ORI</h3>
+              <p>Produk Kriya & Batik Pilihan</p>
+              <span class="side-link">Belanja Sekarang →</span>
+            </div>
+          </div>
+
+          <div class="side-banner side-banner-bottom" @click="selectProductFilter('Kuliner Nusantara'); submitSearch()">
+            <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=85" alt="Gerakan Bangga Buatan ID" />
+            <div class="side-banner-overlay coral"></div>
+            <div class="side-banner-content">
+              <span class="side-badge coral">Gerakan GBBI</span>
+              <h3>DISKON S.D. 80%</h3>
+              <p>Subsidi Ongkir 3T + Voucher</p>
+              <span class="side-link">Klaim Promo →</span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Quick Feature Shortcuts Bar -->
+      <div class="quick-shortcuts-bar">
+        <button
+          v-for="item in quickLinks"
+          :key="item.name"
+          type="button"
+          class="shortcut-item"
+          @click="handleQuickShortcut(item)"
+        >
+          <div class="shortcut-icon-wrap">
+            <span class="shortcut-icon">{{ item.icon }}</span>
+            <span v-if="item.badge" class="shortcut-badge">{{ item.badge }}</span>
+          </div>
+          <span class="shortcut-label">{{ item.name }}</span>
+        </button>
       </div>
     </section>
 
-    <section class="trust-strip page-width" aria-label="Keunggulan PasarPintar">
-      <div class="trust-item"><span class="trust-icon mint">♧</span><span><b>100% Asli UMKM</b><small>Didanai kementerian & kurator lokal tersertifikasi.</small></span></div>
-      <div class="trust-item"><span class="trust-icon coral">♙</span><span><b>Kurasi Kualitas Teruji</b><small>Standar uji kemasan higienis & rasa autentik.</small></span></div>
-      <div class="trust-item"><span class="trust-icon blue">▣</span><span><b>Ekspedisi Aman Garansi</b><small>Garansi sampai dengan selamat atau uang kembali.</small></span></div>
-      <div class="trust-item"><span class="trust-icon yellow">◇</span><span><b>Dampak Nyata Marjin Adil</b><small>Potongan rendah, nilai kembali ke perajin.</small></span></div>
-    </section>
-
+    <!-- Category Section (KATEGORI Panel Card) -->
     <section id="kategori" class="section page-width category-section">
-      <div class="section-heading compact-heading"><div><span class="section-kicker">Jelajahi Produk Lokal</span><h2>Belanja berdasarkan kategori</h2></div><a class="text-link" href="#produk">Lihat semua kategori <span>→</span></a></div>
-      <div class="category-grid">
-        <a v-for="category in categories" :key="category.name" class="category-card" href="#produk" @click.prevent="selectCategoryCard(category.name)">
-          <div class="category-image"><img :src="`https://images.unsplash.com/${category.image}?w=520&q=82`" :alt="category.name" loading="lazy" /><span class="category-arrow">↗</span></div>
-          <b>{{ category.name }}</b><small>{{ category.count }}</small>
-        </a>
+      <div class="category-panel-card">
+        <div class="category-panel-header">
+          <h2>KATEGORI</h2>
+          <a class="text-link" href="#produk" @click.prevent="selectProductFilter('Semua Pilihan'); submitSearch()">
+            Lihat Semua Kategori <span>→</span>
+          </a>
+        </div>
+        <div class="category-circle-grid">
+          <button
+            v-for="category in categories"
+            :key="category.name"
+            type="button"
+            class="category-circle-item"
+            @click="selectCategoryCard(category.name)"
+          >
+            <div class="category-circle-thumb">
+              <img :src="`https://images.unsplash.com/${category.image}?w=200&q=80`" :alt="category.name" loading="lazy" />
+            </div>
+            <span class="category-circle-label">{{ category.name }}</span>
+            <small class="category-circle-count">{{ category.count }}</small>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -527,6 +698,7 @@ function subscribe() {
     </footer>
     </template>
   </main>
+  <SellerOrderManagement v-else-if="currentView === 'seller'" @back-to-store="goHome" />
   <PlatformSettings v-else @back-to-store="goHome" />
 </template>
 

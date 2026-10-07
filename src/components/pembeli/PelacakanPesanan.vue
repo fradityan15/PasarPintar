@@ -94,7 +94,7 @@ async function copyOrderNumber() {
             <section class="tracking-card journey-card">
               <div class="tracking-section-heading"><div><span class="tracking-eyebrow">RIWAYAT PENGIRIMAN</span><h2>Perjalanan paket</h2></div><span class="journey-order-count">{{ activeEvents.length }} pembaruan</span></div>
               <ol class="journey-timeline">
-                <li v-for="(event, index) in events" :key="event.title" :class="event.state">
+                <li v-for="event in events" :key="event.title" :class="event.state">
                   <span class="timeline-marker"><i v-if="event.state === 'complete'">✓</i><i v-else-if="event.state === 'current'">●</i></span>
                   <div class="timeline-content"><div class="timeline-title-row"><h3>{{ event.title }}</h3><time>{{ event.time }}</time></div><p>{{ event.description }}</p><small>⌖ &nbsp; {{ event.location }}</small></div>
                 </li>
