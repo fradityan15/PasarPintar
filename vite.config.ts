@@ -8,6 +8,9 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Tulis nama repository GitHub Anda di sini, diapit garis miring
+  base: '/PasarPintar/',
+  
   plugins: [
     vue(),
     vueJsx(),
