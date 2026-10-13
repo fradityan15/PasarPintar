@@ -71,14 +71,14 @@ const stockProgressPercentage = computed(() => {
 const badgeClasses = computed(() => {
   switch (props.badgeVariant) {
     case 'success':
-      return 'bg-white/90 text-[#16A34A] border-[#E4E8E3]'
+      return 'bg-white/90 text-[#151B28] border-[#D8E1EB]'
     case 'warning':
       return 'bg-white/90 text-[#D97706] border-[#E4E8E3]'
     case 'danger':
       return 'bg-[#E05A36] text-white border-transparent'
     case 'primary':
     default:
-      return 'bg-white/90 text-[#0D7A5F] border-[#E4E8E3]'
+      return 'bg-white/90 text-[#151B28] border-[#D8E1EB]'
   }
 })
 
@@ -99,17 +99,17 @@ const handleToggleWishlist = (e: MouseEvent) => {
 
 <template>
   <div
-    class="group relative flex flex-col w-full bg-white rounded-2xl border border-[#E4E8E3] overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer font-sans"
+    class="product-card group relative flex flex-col w-full bg-white rounded-2xl border border-[#E5E7EB] overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer font-sans"
     @click="handleCardClick"
   >
     <!-- Image & Top Badges Container -->
-    <div class="relative w-full aspect-square bg-[#F4F7F5] overflow-hidden flex items-center justify-center">
+    <div class="relative w-full aspect-square bg-[#F8FAFC] overflow-hidden flex items-center justify-center p-3">
       <!-- Product Image -->
       <img
         v-if="imageUrl"
         :src="imageUrl"
         :alt="imageAlt || name"
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        class="w-full h-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
         loading="lazy"
       />
       <!-- Fallback image placeholder if no image provided -->
@@ -127,10 +127,10 @@ const handleToggleWishlist = (e: MouseEvent) => {
         v-if="badge || discount"
         class="absolute top-3 left-3 z-10 flex items-center shadow-sm"
       >
-        <!-- Flash Sale Discount Badge -->
+        <!-- Flash Sale / Discount Badge -->
         <span
           v-if="discount"
-          class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold leading-none bg-[#E05A36] text-white"
+          class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold leading-none bg-[#151B28] text-white"
         >
           {{ typeof discount === 'number' ? `-${discount}%` : discount }}
         </span>
@@ -148,7 +148,7 @@ const handleToggleWishlist = (e: MouseEvent) => {
       <!-- Top-Right Wishlist Button -->
       <button
         type="button"
-        class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#7A8C82] hover:text-[#E05A36] hover:bg-white shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#0D7A5F]/40"
+        class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#64748B] hover:text-[#E05A36] hover:bg-white shadow-sm transition-all focus:outline-none"
         :class="{ '!text-[#E05A36]': isWishlisted }"
         title="Simpan ke Wishlist"
         aria-label="Simpan ke Wishlist"
@@ -169,111 +169,78 @@ const handleToggleWishlist = (e: MouseEvent) => {
     </div>
 
     <!-- Product Details Content -->
-    <div class="flex flex-col flex-1 p-4 gap-3">
-      <!-- Location and Product Title -->
-      <div class="flex flex-col gap-1.5">
-        <!-- Origin Location -->
-        <div v-if="location" class="flex items-center gap-1.5 text-xs text-[#7A8C82] font-medium">
-          <svg class="w-3 h-3 text-[#7A8C82] shrink-0" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-          </svg>
-          <span class="truncate">{{ location }}</span>
-        </div>
-
-        <!-- Product Name -->
-        <h4
-          class="text-sm font-bold leading-5 text-[#13211B] line-clamp-2 min-h-10 group-hover:text-[#0D7A5F] transition-colors"
-          :title="name"
-        >
-          {{ name }}
-        </h4>
+    <div class="flex flex-col flex-1 p-3.5 gap-2">
+      <!-- Location badge (if available) -->
+      <div v-if="location" class="flex items-center gap-1 text-[11px] text-[#64748B] font-medium">
+        <svg class="w-3 h-3 text-[#64748B] shrink-0" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+        </svg>
+        <span class="truncate">{{ location }}</span>
       </div>
 
-      <!-- Rating & Reviews (for default variant) -->
-      <div v-if="variant !== 'flash-sale' && (rating || reviewCount)" class="flex items-center gap-1.5 text-xs">
-        <!-- Star icon -->
-        <svg class="w-3.5 h-3.5 text-[#D97706] fill-current" viewBox="0 0 24 24">
-          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-        </svg>
-        <span class="font-bold text-[#13211B]">{{ rating }}</span>
-        <span v-if="reviewCount" class="text-[#7A8C82]">
-          {{ typeof reviewCount === 'number' ? `(${reviewCount})` : reviewCount }}
+      <!-- Product Name -->
+      <h4
+        class="text-xs sm:text-sm font-bold leading-snug text-[#151B28] line-clamp-2 min-h-9 group-hover:text-[#151B28] transition-colors"
+        :title="name"
+      >
+        {{ name }}
+      </h4>
+
+      <!-- Star Rating & Review Count -->
+      <div class="flex items-center gap-1 text-xs">
+        <div class="flex items-center text-[#F59E0B]">
+          <svg v-for="i in 5" :key="i" class="w-3 h-3 fill-current" viewBox="0 0 24 24">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+          </svg>
+        </div>
+        <span v-if="rating" class="font-bold text-[#151B28] text-[11px]">{{ rating }}</span>
+        <span v-if="reviewCount" class="text-[#94A3B8] text-[11px]">
+          ({{ typeof reviewCount === 'number' ? reviewCount : reviewCount }})
         </span>
       </div>
 
-      <!-- Price & Action Section -->
-      <div class="mt-auto flex flex-col gap-3 pt-1">
-        <!-- Default Card Bottom Row: Price on left, Round Button on right -->
-        <div v-if="variant === 'default'" class="flex items-center justify-between gap-2">
-          <!-- Price display -->
-          <div class="flex flex-col">
-            <span
-              v-if="formattedOriginalPrice"
-              class="text-xs text-[#7A8C82] line-through"
-            >
-              {{ formattedOriginalPrice }}
-            </span>
-            <span class="text-base font-extrabold text-[#0D7A5F] tracking-tight">
-              {{ formattedPrice }}
-            </span>
-          </div>
-
-          <!-- Add to cart round button -->
-          <button
-            type="button"
-            class="w-9 h-9 rounded-full bg-[#0D7A5F]/10 text-[#0D7A5F] hover:bg-[#0D7A5F] hover:text-white flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-[#0D7A5F]/40 shadow-xs"
-            title="Tambah ke Keranjang"
-            aria-label="Tambah ke Keranjang"
-            @click="handleAddToCart"
+      <!-- Price Section -->
+      <div class="mt-auto flex flex-col gap-2 pt-1">
+        <div class="flex items-baseline gap-2">
+          <span class="text-sm sm:text-base font-extrabold text-[#151B28] tracking-tight">
+            {{ formattedPrice }}
+          </span>
+          <span
+            v-if="formattedOriginalPrice"
+            class="text-xs text-[#94A3B8] line-through"
           >
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-          </button>
+            {{ formattedOriginalPrice }}
+          </span>
         </div>
 
-        <!-- Flash Sale Bottom Row: Strikethrough price + Stock progress bar + Full width button -->
-        <div v-else-if="variant === 'flash-sale'" class="flex flex-col gap-2.5">
-          <!-- Price with Discount -->
-          <div class="flex items-baseline gap-2">
-            <span class="text-base font-extrabold text-[#E05A36] tracking-tight">
-              {{ formattedPrice }}
-            </span>
-            <span
-              v-if="formattedOriginalPrice"
-              class="text-xs text-[#7A8C82] line-through"
-            >
-              {{ formattedOriginalPrice }}
-            </span>
+        <!-- Stock Progress Bar for Flash Sale -->
+        <div v-if="variant === 'flash-sale' && stockLeft !== undefined" class="flex flex-col gap-1">
+          <div class="w-full h-1.5 bg-[#E2E8F0] rounded-full overflow-hidden">
+            <div
+              class="h-full bg-[#151B28] rounded-full transition-all duration-300"
+              :style="{ width: `${stockProgressPercentage}%` }"
+            />
           </div>
-
-          <!-- Stock Progress Bar -->
-          <div v-if="stockLeft !== undefined" class="flex flex-col gap-1">
-            <div class="w-full h-2 bg-[#E8F0EC] rounded-full overflow-hidden">
-              <div
-                class="h-full bg-[#E05A36] rounded-full transition-all duration-300"
-                :style="{ width: `${stockProgressPercentage}%` }"
-              />
-            </div>
-            <span class="text-xs font-semibold text-[#EA580C]">
-              Tersisa {{ stockLeft }} pcs lagi
-            </span>
-          </div>
-
-          <!-- Full Width Action Button -->
-          <button
-            type="button"
-            class="w-full h-9 rounded-xl bg-[#0D7A5F] hover:bg-[#0b6b53] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#0D7A5F]/40"
-            @click="handleAddToCart"
-          >
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            <span>Tambah Cepat</span>
-          </button>
+          <span class="text-[10.5px] font-semibold text-[#151B28]">
+            Tersisa {{ stockLeft }} pcs lagi
+          </span>
         </div>
+
+        <!-- Full-Width "Add to Cart" Shopluxe Button -->
+        <button
+          type="button"
+          class="w-full mt-1 h-9 rounded-lg border border-[#E5E7EB] bg-white hover:bg-[#151B28] hover:text-white hover:border-[#151B28] text-[#151B28] text-xs font-bold flex items-center justify-center gap-1.5 transition-all duration-200 shadow-xs active:scale-[0.98]"
+          title="Tambah ke Keranjang"
+          aria-label="Tambah ke Keranjang"
+          @click="handleAddToCart"
+        >
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 4h2l2.3 11.2a2 2 0 0 0 2 1.6h8.9a2 2 0 0 0 2-1.6L22 8H6"/>
+            <circle cx="10" cy="21" r="1"/>
+            <circle cx="18" cy="21" r="1"/>
+          </svg>
+          <span>ADD TO CART</span>
+        </button>
       </div>
     </div>
   </div>

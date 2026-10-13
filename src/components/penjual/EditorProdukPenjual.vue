@@ -12,34 +12,34 @@ const props = withDefaults(defineProps<{ initialMode?: 'add' | 'edit'; initialPr
 
 const mode = ref<'add' | 'edit'>(props.initialMode)
 const activeStep = ref(1)
-const productName = ref(props.initialProductName || 'Kopi Arabika Flores Bajawa Full-Wash 250gr')
-const category = ref('Kopi & Minuman Herbal')
-const subcategory = ref('Kopi Biji & Bubuk')
-const origin = ref('Kab. Ngada, Flores, Nusa Tenggara Timur')
-const description = ref('Kopi Arabika Flores Bajawa dipetik langsung di ketinggian 1.300–1.550 mdpl pada lereng Gunung Inerie yang subur dan kaya mineral vulkanis. Dipetik merah 100% oleh petani perempuan anggota Koperasi Kopi Bajawa dan diproses secara higienis melalui metode Full-Washed Fermentation selama 36 jam.\n\nKarakteristik Rasa (Cupping Notes):\n• Aroma: Fragrant floral, chocolate nutty, and fresh vanilla bean\n• Rasa: Cokelat susu, apel merah, dan karamel\n• Tingkat sangrai: Medium roast')
+const productName = ref(props.initialProductName || 'Kain Tenun Ikat Sumba 240x120cm Pewarna Alami')
+const category = ref('Wastra & Tenun')
+const subcategory = ref('Tenun Ikat')
+const origin = ref('Kab. Sumba Timur, Nusa Tenggara Timur')
+const description = ref('Kain Tenun Ikat Sumba diproduksi secara tradisional oleh perajin perempuan Sumba Timur menggunakan teknik tenun ikat lungsi dengan pewarna alami dari akar mengkudu dan daun nila. Proses pembuatan membutuhkan waktu 3-6 bulan untuk menghasilkan helai kain bernilai seni tinggi.\n\nKarakteristik & Motif:\n• Motif: Pahikung Kuda & Rusa (Simbol Keagungan Sumba)\n• Warna: Indigo Alami & Cokelat Akar Mengkudu\n• Ukuran: 240cm × 120cm')
 const variants = ref<ProductVariant[]>([
-  { name: '250g - Biji Utuh', sku: 'KBI-ARB-250-W', price: 68000, stock: 24 },
-  { name: '500g - Biji Utuh', sku: 'KBI-ARB-500-W', price: 125000, stock: 12 },
-  { name: '1kg - Biji Utuh', sku: 'KBI-ARB-1KG-W', price: 240000, stock: 5 },
+  { name: '240x120cm - Indigo Alami', sku: 'PP-TNN-240-IND', price: 385000, stock: 14 },
+  { name: '240x120cm - Cokelat Mengkudu', sku: 'PP-TNN-240-CKL', price: 420000, stock: 8 },
+  { name: 'Selendang Tenun 180x50cm', sku: 'PP-TNN-180-SLD', price: 185000, stock: 15 },
 ])
 const optionGroups = ref([
-  { title: 'Tipe Varian 1: Bentuk Gilingan', options: ['Biji Utuh (Whole Bean)', 'Giling Kasar (Coarse - Cold Brew/French Press)', 'Giling Halus (Fine - Tubruk/Espresso)'] },
-  { title: 'Tipe Varian 2: Ukuran Kemasan', options: ['250g (Kemasan Standar)', '500g (Pouch Medium)', '1kg (Bulk Hemat Roastery)'] },
+  { title: 'Tipe Varian 1: Pewarnaan', options: ['Pewarna Alam (Indigo/Mengkudu)', 'Pewarna Sintetis Premium'] },
+  { title: 'Tipe Varian 2: Ukuran Kain', options: ['240x120cm (Kain Utuh)', '180x50cm (Selendang)', 'Sarung Tenun'] },
 ])
 const nib = ref('9120003412093')
 const halalNumber = ref('ID32110000456123')
-const packageWeight = ref(300)
-const packageLength = ref(15)
-const packageWidth = ref(8)
-const packageHeight = ref(22)
+const packageWeight = ref(600)
+const packageLength = ref(30)
+const packageWidth = ref(20)
+const packageHeight = ref(5)
 const supportedCouriers = ref(['J&T Express', 'SiCepat Cargo', 'JNE OKE/REG', 'Pos Indonesia'])
 const activeCouriers = ref(['J&T Express', 'SiCepat Cargo', 'JNE OKE/REG', 'Pos Indonesia'])
 const isVariantActive = ref(true)
 const photos = ref<ProductPhoto[]>([
-  { src: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=520&q=85', name: 'Foto utama kemasan kopi' },
-  { src: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=320&q=82', name: 'Proses sangrai biji kopi' },
-  { src: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=320&q=82', name: 'Kopi tersaji' },
-  { src: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=320&q=82', name: 'Kebun kopi Bajawa' },
+  { src: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=520&q=85', name: 'Foto utama kain tenun' },
+  { src: 'https://images.unsplash.com/photo-1544441893-675973e31985?w=320&q=82', name: 'Detail serat tenun ikat' },
+  { src: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=320&q=82', name: 'Kain batik & tenun tersaji' },
+  { src: 'https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?w=320&q=82', name: 'Sentra perajin tenun' },
 ])
 const fileInput = ref<HTMLInputElement | null>(null)
 const toastMessage = ref('')
@@ -89,21 +89,21 @@ function setMode(nextMode: 'add' | 'edit') {
     nib.value = ''
     halalNumber.value = ''
   } else {
-    productName.value = props.initialProductName || 'Kopi Arabika Flores Bajawa Full-Wash 250gr'
-    category.value = 'Kopi & Minuman Herbal'
-    subcategory.value = 'Kopi Biji & Bubuk'
-    origin.value = 'Kab. Ngada, Flores, Nusa Tenggara Timur'
-    description.value = 'Kopi Arabika Flores Bajawa dipetik langsung di ketinggian 1.300–1.550 mdpl pada lereng Gunung Inerie yang subur dan kaya mineral vulkanis. Dipetik merah 100% oleh petani perempuan anggota Koperasi Kopi Bajawa dan diproses secara higienis melalui metode Full-Washed Fermentation selama 36 jam.\n\nKarakteristik Rasa (Cupping Notes):\n• Aroma: Fragrant floral, chocolate nutty, and fresh vanilla bean\n• Rasa: Cokelat susu, apel merah, dan karamel\n• Tingkat sangrai: Medium roast'
+    productName.value = props.initialProductName || 'Kain Tenun Ikat Sumba 240x120cm Pewarna Alami'
+    category.value = 'Wastra & Tenun'
+    subcategory.value = 'Tenun Ikat'
+    origin.value = 'Kab. Sumba Timur, Nusa Tenggara Timur'
+    description.value = 'Kain Tenun Ikat Sumba diproduksi secara tradisional oleh perajin perempuan Sumba Timur menggunakan teknik tenun ikat lungsi dengan pewarna alami dari akar mengkudu dan daun nila. Proses pembuatan membutuhkan waktu 3-6 bulan untuk menghasilkan helai kain bernilai seni tinggi.\n\nKarakteristik & Motif:\n• Motif: Pahikung Kuda & Rusa (Simbol Keagungan Sumba)\n• Warna: Indigo Alami & Cokelat Akar Mengkudu\n• Ukuran: 240cm × 120cm'
     variants.value = [
-      { name: '250g - Biji Utuh', sku: 'KBI-ARB-250-W', price: 68000, stock: 24 },
-      { name: '500g - Biji Utuh', sku: 'KBI-ARB-500-W', price: 125000, stock: 12 },
-      { name: '1kg - Biji Utuh', sku: 'KBI-ARB-1KG-W', price: 240000, stock: 5 },
+      { name: '240x120cm - Indigo Alami', sku: 'PP-TNN-240-IND', price: 385000, stock: 14 },
+      { name: '240x120cm - Cokelat Mengkudu', sku: 'PP-TNN-240-CKL', price: 420000, stock: 8 },
+      { name: 'Selendang Tenun 180x50cm', sku: 'PP-TNN-180-SLD', price: 185000, stock: 15 },
     ]
     photos.value = [
-      { src: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=520&q=85', name: 'Foto utama kemasan kopi' },
-      { src: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=320&q=82', name: 'Proses sangrai biji kopi' },
-      { src: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=320&q=82', name: 'Kopi tersaji' },
-      { src: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=320&q=82', name: 'Kebun kopi Bajawa' },
+      { src: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=520&q=85', name: 'Foto utama kain tenun' },
+      { src: 'https://images.unsplash.com/photo-1544441893-675973e31985?w=320&q=82', name: 'Detail serat tenun ikat' },
+      { src: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=320&q=82', name: 'Kain batik & tenun tersaji' },
+      { src: 'https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?w=320&q=82', name: 'Sentra perajin tenun' },
     ]
     nib.value = '9120003412093'
     halalNumber.value = 'ID32110000456123'
@@ -207,7 +207,7 @@ onUnmounted(() => {
   <main class="product-editor-shell">
     <aside class="product-editor-sidebar">
       <button class="editor-brand" type="button" aria-label="Kembali ke pesanan" @click="emit('back')"><span class="editor-brand-mark">P</span><span><b>PasarPintar</b><small>PORTAL MITRA UMKM</small></span></button>
-      <div class="editor-shop-chip">◎ &nbsp; Koperasi Kopi Bajawa (Binaan)</div>
+      <div class="editor-shop-chip">◎ &nbsp; Koperasi Tenun & Batik Nusantara</div>
       <nav class="editor-sidebar-nav" aria-label="Navigasi toko">
         <button type="button" @click="emit('back')"><span>▦</span> Ringkasan Toko</button>
         <button type="button" class="active"><span>▤</span> Produk & Stok <i></i></button>
@@ -224,7 +224,7 @@ onUnmounted(() => {
         <label><span>⌕</span><input type="search" placeholder="Cari SKU, produk, pesanan..." aria-label="Cari SKU, produk, pesanan" /></label>
         <button class="editor-add-button" type="button" @click="setMode('add')">＋ Tambah Produk</button>
         <button class="editor-notification" type="button" aria-label="Notifikasi" @click="notify('Tidak ada notifikasi baru.')">♧<i></i></button>
-        <button class="editor-profile" type="button" @click="notify('Toko Bajawa berstatus buka.')"><b>Toko Bajawa</b><small>● Buka</small></button>
+        <button class="editor-profile" type="button" @click="notify('Toko Wastra berstatus buka.')"><b>Toko Wastra</b><small>● Buka</small></button>
       </header>
 
       <div class="editor-page-content">
@@ -247,9 +247,9 @@ onUnmounted(() => {
           <div class="editor-primary-column">
             <section id="product-step-1" class="editor-form-panel basics-panel">
               <header class="editor-panel-heading"><span class="editor-heading-icon">▦</span><span><b>Informasi Dasar Produk</b><small>Detail utama yang memudahkan kurasi mitra dan penelusuran pembeli.</small></span><span class="editor-quality-badge">Wajib Diisi</span></header>
-              <label class="editor-field name-field">Nama Produk <b>*</b><small>{{ productName.length }} / 100 karakter</small><input v-model="productName" maxlength="100" placeholder="Contoh: Kopi Arabika Flores Bajawa Full-Wash 250gr" /></label>
+              <label class="editor-field name-field">Nama Produk <b>*</b><small>{{ productName.length }} / 100 karakter</small><input v-model="productName" maxlength="100" placeholder="Contoh: Kain Tenun Ikat Sumba 240x120cm Pewarna Alami" /></label>
               <p class="editor-field-hint">Sertakan jenis produk, daerah asal, metode olah, dan bentuk untuk hasil pencarian terbaik.</p>
-              <div class="editor-field-grid"><label class="editor-field">Kategori Utama <b>*</b><select v-model="category"><option value="">Pilih kategori</option><option>Kopi & Minuman Herbal</option><option>Makanan & Camilan</option><option>Wastra & Tenun</option><option>Kriya Rumah</option><option>Herbal & Perawatan</option></select></label><label class="editor-field">Sub-Kategori <b>*</b><select v-model="subcategory"><option value="">Pilih sub-kategori</option><option>Kopi Biji & Bubuk</option><option>Teh Herbal</option><option>Biji Kakao</option><option>Minuman Tradisional</option></select></label></div>
+              <div class="editor-field-grid"><label class="editor-field">Kategori Utama <b>*</b><select v-model="category"><option value="">Pilih kategori</option><option>Wastra & Tenun</option><option>Batik Cap</option><option>Batik Tulis</option><option>Kriya Rumah</option><option>Aksesoris Etnik</option></select></label><label class="editor-field">Sub-Kategori <b>*</b><select v-model="subcategory"><option value="">Pilih sub-kategori</option><option>Tenun Ikat</option><option>Batik Tulis Sogan</option><option>Songket</option><option>Sarung & Selendang</option></select></label></div>
               <label class="editor-field">Asal Sentra Pengrajin / Komoditas Lokal <b>*</b><span class="editor-input-with-icon"><input v-model="origin" placeholder="Kabupaten / kota, provinsi" /><span>⌖</span></span><small class="field-success">✓ Terhubung dengan Program Klaster Binaan Kemenkop UKM</small></label>
               <label class="editor-field description-field">Deskripsi Lengkap Produk <b>*</b><div class="editor-rich-editor"><div class="rich-toolbar"><button type="button" aria-label="Tebal" @click="description += ' **teks tebal**'">B</button><button type="button" aria-label="Miring" @click="description += ' *teks miring*'">I</button><button type="button" aria-label="Garis bawah" @click="description += ' _teks_'">U</button><span></span><button type="button" aria-label="Daftar berpoin" @click="description += '\n• '">☷</button><button type="button" aria-label="Daftar bernomor" @click="description += '\n1. '">≡</button><button type="button" aria-label="Tambahkan tautan" @click="description += ' https://'">↗</button><button type="button" aria-label="Sisipkan tabel" @click="description += '\nDetail | Informasi'">▦</button></div><textarea v-model="description" rows="6" placeholder="Ceritakan bahan, proses pembuatan, keunggulan, dan cara penyimpanan produk."></textarea></div><small class="editor-description-hint">Format Markdown dan Rich Text didukung.</small></label>
             </section>

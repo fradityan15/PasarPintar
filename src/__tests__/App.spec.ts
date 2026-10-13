@@ -10,7 +10,7 @@ describe('App', () => {
 
   it('mounts renders properly', () => {
     const wrapper = mount(App)
-    expect(wrapper.text()).toContain('Beras Premium 5kg')
+    expect(wrapper.text()).toContain('Kain Tenun Ikat Sumba Motif Pahikung')
     expect(wrapper.find('.location-control').exists()).toBe(false)
   })
 
@@ -53,13 +53,13 @@ describe('App', () => {
     const wrapper = mount(App)
 
     await wrapper.get('.curated-grid .group').trigger('click')
-    expect(wrapper.get('.purchase-card h1').text()).toBe('Beras Premium 5kg')
+    expect(wrapper.get('.purchase-card h1').text()).toBe('Kain Tenun Ikat Sumba Motif Pahikung')
 
     await wrapper.get('.add-cart-button').trigger('click')
     expect(wrapper.get('.cart-action i').text()).toBe('4')
 
     await wrapper.get('.buy-now-button').trigger('click')
-    expect(wrapper.findAll('.cart-item-details h3').map((heading) => heading.text())).toContain('Beras Premium 5kg')
+    expect(wrapper.findAll('.cart-item-details h3').map((heading) => heading.text())).toContain('Kain Tenun Ikat Sumba Motif Pahikung')
   })
 
   it('opens login and registration and updates the account state', async () => {
@@ -129,10 +129,9 @@ describe('App', () => {
     vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
     const wrapper = mount(App)
 
-    expect(wrapper.get('.mobile-search-placeholder').text()).toBe('Cari')
-    await wrapper.get('.search-text-entry input').setValue('kopi')
-    expect(wrapper.find('.mobile-search-placeholder').exists()).toBe(false)
-    await wrapper.get('.search-text-entry input').setValue('')
+    await wrapper.get('.search-box-wrap input').setValue('tenun')
+    expect((wrapper.get('.search-box-wrap input').element as HTMLInputElement).value).toBe('tenun')
+    await wrapper.get('.search-box-wrap input').setValue('')
 
     const toggle = wrapper.get('.mobile-utility-toggle')
     expect(toggle.text()).toBe('≡')
@@ -173,7 +172,7 @@ describe('App', () => {
     const wrapper = mount(App)
 
     await wrapper.get('.announcement-links a[href="#admin"]').trigger('click')
-    expect(wrapper.get('.admin-shell h1').text()).toContain('Konfigurasi Platform')
+    expect(wrapper.get('.admin-shell h1').text()).toContain('Pengaturan Sistem & Konfigurasi')
     expect(wrapper.get('.subsidy-panel h2').text()).toBe('Program Afirmasi Subsidi Ongkir 3T')
 
     await wrapper.get('.heading-actions .save').trigger('click')
@@ -188,7 +187,7 @@ describe('App', () => {
     const wrapper = mount(App)
 
     await wrapper.get('.announcement-links a[href="#admin"]').trigger('click')
-    await wrapper.findAll('.admin-nav button').find((button) => button.text() === 'Statistik & Analisis Nasional')!.trigger('click')
+    await wrapper.findAll('.admin-nav button').find((button) => button.text().includes('Statistik & Analisis'))!.trigger('click')
 
     expect(wrapper.get('.analytics-content h1').text()).toContain('Analisis Nasional Ekosistem UMKM')
     expect(wrapper.findAll('.metric-card')).toHaveLength(4)
@@ -280,10 +279,10 @@ describe('App', () => {
     expect(wrapper.findAll('.inventory-table tbody tr')).toHaveLength(1)
 
     await wrapper.findAll('.inventory-tabs button').find((button) => button.text().includes('Semua Produk'))!.trigger('click')
-    const coffeeProduct = wrapper.findAll('.inventory-table tbody tr').find((row) => row.text().includes('500g'))!
-    await coffeeProduct.get('[title="Edit produk"]').trigger('click')
+    const batikProduct = wrapper.findAll('.inventory-table tbody tr').find((row) => row.text().includes('Tarutung'))!
+    await batikProduct.get('[title="Edit produk"]').trigger('click')
     expect(wrapper.get('.editor-page-heading h1').text()).toBe('Edit Detail Produk UMKM')
-    expect((wrapper.get('.name-field input').element as HTMLInputElement).value).toContain('500g')
+    expect((wrapper.get('.name-field input').element as HTMLInputElement).value).toContain('Tarutung')
     await wrapper.get('.editor-brand').trigger('click')
     expect(wrapper.get('.inventory-heading h1').text()).toBe('Katalog & Stok Produk Toko')
   })
@@ -322,7 +321,7 @@ describe('App', () => {
     await wrapper.get('.announcement-links a[href="#seller"]').trigger('click')
     await wrapper.findAll('.seller-nav button').find((button) => button.text().includes('Profil Toko & Kurir'))!.trigger('click')
     expect(wrapper.get('.store-profile-heading h1').text()).toBe('Profil Toko & Pengiriman')
-    expect(wrapper.get('.public-store-identity b').text()).toBe('Koperasi Kopi Bajawa Lestari')
+    expect(wrapper.get('.public-store-identity b').text()).toBe('Koperasi Tenun & Batik Nusantara')
     expect(wrapper.findAll('.profile-courier-card')).toHaveLength(4)
 
     await wrapper.get('input[aria-label="Jam buka Senin"]').setValue('09:00')

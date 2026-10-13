@@ -1867,7 +1867,16 @@ function resetDefaults() {
     grid-column: 1;
   }
   .admin-topbar {
+    flex-wrap: wrap;
+    gap: 8px;
     padding: 8px 16px;
+  }
+  .admin-search {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+  .admin-search kbd {
+    display: none;
   }
   .portal-label,
   .server-health {
@@ -1882,7 +1891,21 @@ function resetDefaults() {
   }
   .heading-actions {
     width: 100%;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-top: 0;
+  }
+  .heading-actions button {
+    min-width: 0;
+    padding-inline: 8px;
+    white-space: normal;
+  }
+  .heading-actions button.save {
+    grid-column: 1 / -1;
+  }
+  .settings-tabs {
+    width: 100%;
+    min-width: 0;
   }
   .subsidy-fields {
     grid-template-columns: 1fr;

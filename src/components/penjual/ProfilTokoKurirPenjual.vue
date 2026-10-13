@@ -14,12 +14,12 @@ type Courier = {
 const emit = defineEmits<{ back: [] }>()
 
 const activeSection = ref('Informasi Toko')
-const storeName = ref('Koperasi Kopi Bajawa Lestari')
-const tagline = ref('Kopi Flores pilihan, langsung dari petani Bajawa')
-const description = ref('Koperasi produsen kopi arabika Flores yang dikelola bersama petani lokal Ngada. Kami menjaga mutu dari kebun hingga cangkir melalui praktik panen berkelanjutan dan proses pascapanen yang teliti.')
-const category = ref('Kopi & Minuman Herbal')
+const storeName = ref('Koperasi Tenun & Batik Nusantara')
+const tagline = ref('Kain Tenun Ikat & Batik Mahakarya Perajin Nusantara')
+const description = ref('Koperasi produsen kain tenun ikat dan batik tulis tradisional yang memberdayakan perajin lokal Nusantara. Kami menjaga mutu karya tenun dan batik otentik dengan pewarna alami.')
+const category = ref('Wastra & Tenun')
 const contactName = ref('Maria Yosefina')
-const contactEmail = ref('halo@kopibajawa.id')
+const contactEmail = ref('halo@wastranusantara.id')
 const contactPhone = ref('0812-3456-7890')
 const whatsappNumber = ref('6281234567890')
 const address = ref('Jl. Ahmad Yani No. 18, Kelurahan Ngedukelu')
@@ -113,7 +113,7 @@ function toggleSection(section: string) {
           <div class="profile-field-grid"><label class="profile-field">Desa / Kelurahan <input v-model="village" /></label><label class="profile-field">Kecamatan <input v-model="district" /></label></div>
           <div class="profile-field-grid"><label class="profile-field">Kabupaten / Kota <input v-model="regency" /></label><label class="profile-field">Provinsi <select v-model="province"><option>Nusa Tenggara Timur</option><option>Jawa Timur</option><option>Jawa Barat</option><option>Daerah Istimewa Yogyakarta</option><option>Bali</option></select></label></div>
           <div class="profile-field-grid"><label class="profile-field">Kode Pos <b>*</b><input v-model="postalCode" inputmode="numeric" autocomplete="postal-code" /></label><div class="coordinate-field"><span>KOORDINAT LOKASI</span><div><label>Lat <input v-model="latitude" aria-label="Garis lintang" /></label><label>Long <input v-model="longitude" aria-label="Garis bujur" /></label></div></div></div>
-          <div class="location-map-preview"><div class="map-grid"><span class="map-road profile-road-a"></span><span class="map-road profile-road-b"></span><span class="map-road profile-road-c"></span><i>●</i></div><div><b>Sentra Kopi Bajawa</b><small>{{ locationSummary }} · 86411</small></div><button type="button" @click="saveMessage = 'Peta lokasi toko diperbarui.'">⌖ &nbsp; Atur Lokasi Peta</button></div>
+          <div class="location-map-preview"><div class="map-grid"><span class="map-road profile-road-a"></span><span class="map-road profile-road-b"></span><span class="map-road profile-road-c"></span><i>●</i></div><div><b>Sentra Tenun &amp; Batik</b><small>{{ locationSummary }} · 86411</small></div><button type="button" @click="saveMessage = 'Peta lokasi toko diperbarui.'">⌖ &nbsp; Atur Lokasi Peta</button></div>
           <div class="operation-hours"><header><div><b>Jam Operasional Toko</b><small>Pembeli dapat melihat jadwal layanan toko.</small></div><label class="profile-toggle"><input v-model="isPublic" type="checkbox" /><span></span><b>{{ isPublic ? 'Toko Buka' : 'Toko Tutup' }}</b></label></header><div v-for="day in schedule" :key="day.day" class="operation-day"><label><input v-model="day.enabled" type="checkbox" />{{ day.day }}</label><template v-if="day.enabled"><input v-model="day.open" type="time" :aria-label="`Jam buka ${day.day}`" /><span>s.d.</span><input v-model="day.close" type="time" :aria-label="`Jam tutup ${day.day}`" /></template><small v-else>Libur</small></div></div>
         </section>
 
@@ -126,7 +126,7 @@ function toggleSection(section: string) {
         <p v-if="formError" class="profile-form-error" role="alert">{{ formError }}</p>
       </div>
 
-      <aside class="profile-aside"><section class="public-store-card"><header><div><small>PRATINJAU TOKO PUBLIK</small><b>{{ isPublic ? 'Tayang di marketplace' : 'Toko disembunyikan' }}</b></div><i :class="{ off: !isPublic }"></i></header><div class="public-cover"><img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=700&q=82" alt="Kebun kopi untuk sampul toko" /></div><div class="public-store-identity"><span class="public-avatar">KB</span><div><b>{{ storeName }}</b><small>✓ Mitra Terverifikasi · {{ locationSummary }}</small></div></div><p>{{ tagline }}</p><div class="public-store-stats"><span>★ <b>4.9</b> (64)</span><span>◇ <b>98%</b> respon</span><span>▤ Sejak {{ storeSince }}</span></div><button type="button" :disabled="!isPublic" @click="saveMessage = 'Pratinjau halaman publik dibuka.'">Lihat Halaman Toko ↗</button></section>
+      <aside class="profile-aside"><section class="public-store-card"><header><div><small>PRATINJAU TOKO PUBLIK</small><b>{{ isPublic ? 'Tayang di marketplace' : 'Toko disembunyikan' }}</b></div><i :class="{ off: !isPublic }"></i></header><div class="public-cover"><img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=700&q=82" alt="Sentra tenun untuk sampul toko" /></div><div class="public-store-identity"><span class="public-avatar">KB</span><div><b>{{ storeName }}</b><small>✓ Mitra Terverifikasi · {{ locationSummary }}</small></div></div><p>{{ tagline }}</p><div class="public-store-stats"><span>★ <b>4.9</b> (64)</span><span>◇ <b>98%</b> respon</span><span>▤ Sejak {{ storeSince }}</span></div><button type="button" :disabled="!isPublic" @click="saveMessage = 'Pratinjau halaman publik dibuka.'">Lihat Halaman Toko ↗</button></section>
         <section class="profile-completion-card"><header><div><b>Kelengkapan Profil</b><strong>{{ profileCompletion }}%</strong></div><div class="completion-progress"><i :style="{ width: `${profileCompletion}%` }"></i></div></header><ul><li v-for="item in [{ label: 'Informasi dan kontak toko', done: Boolean(storeName && contactPhone) }, { label: 'Alamat lokasi operasional', done: Boolean(address && postalCode) }, { label: 'Mitra kurir aktif', done: couriers.some((courier) => courier.enabled) }, { label: 'Jam operasional diatur', done: schedule.some((day) => day.enabled) }]" :key="item.label" :class="{ done: item.done }"><i>{{ item.done ? '✓' : '○' }}</i>{{ item.label }}</li></ul></section>
         <section class="profile-support-card"><span>✧</span><div><b>Butuh Bantuan Mitra?</b><p>Pendamping PasarPintar siap membantu pembaruan profil dan aktivasi kurir wilayah Bajawa.</p><button type="button" @click="saveMessage = 'Tim pendamping akan menghubungi kontak tokomu.'">Hubungi Pendamping →</button></div></section></aside>
     </div>

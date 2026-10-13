@@ -18,7 +18,7 @@ const copied = ref(false)
 const lastUpdated = '26 September 2026, 14.28 WIB'
 const events: TrackingEvent[] = [
   { title: 'Pesanan dibuat', description: 'Pembayaran berhasil dikonfirmasi.', time: '26 Sep · 08.42', location: 'PasarPintar', state: 'complete' },
-  { title: 'Disiapkan oleh penjual', description: 'Koperasi Kopi Bajawa mengemas pesanan dengan aman.', time: '26 Sep · 09.16', location: 'Bajawa, Ngada', state: 'complete' },
+  { title: 'Disiapkan oleh penjual', description: 'Koperasi Tenun & Batik Nusantara mengemas pesanan dengan aman.', time: '26 Sep · 09.16', location: 'Bajawa, Ngada', state: 'complete' },
   { title: 'Paket diterima kurir', description: 'Paket sudah dijemput J&T Express dari mitra UMKM.', time: '26 Sep · 11.05', location: 'Bajawa, Ngada', state: 'complete' },
   { title: 'Dalam perjalanan', description: 'Paket bergerak menuju pusat sortir regional.', time: '26 Sep · 14.28', location: 'Hub Pengiriman Kupang', state: 'current' },
   { title: 'Diantar ke alamat tujuan', description: 'Kurir akan menghubungi penerima saat paket tiba.', time: 'Perkiraan 27 Sep', location: 'Jakarta Selatan', state: 'upcoming' },
@@ -31,14 +31,14 @@ const order = {
   courier: 'J&T Express',
   service: 'Reguler',
   waybill: 'JT-8800-26-0926',
-  seller: 'Koperasi Kopi Bajawa Lestari',
+  seller: 'Koperasi Tenun & Batik Nusantara',
   origin: 'Bajawa, Ngada, Nusa Tenggara Timur',
   destination: 'Raha Putri · Jakarta Selatan, DKI Jakarta',
   recipient: 'Raha Putri',
   phone: '08•• •••• 7890',
   items: [
-    { name: 'Kopi Arabika Flores Bajawa Single Origin', variant: '250 gram · Biji Utuh', quantity: 2, image: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=300&q=82' },
-    { name: 'Kemeja Batik Cap Motif Parang', variant: 'Ukuran L', quantity: 1, image: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=300&q=82' },
+    { name: 'Kain Tenun Ikat Sumba Motif Pahikung', variant: '240x120cm · Indigo Alami', quantity: 2, image: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=300&q=82' },
+    { name: 'Kemeja Batik Cap Motif Parang', variant: 'Ukuran L', quantity: 1, image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=300&q=82' },
   ],
 }
 
